@@ -20,7 +20,8 @@ async function getAllDizziness(request, response) {
 
 async function getDizziness(request, response) {
     const id = parseInt(request.params.id);
-    if (isNaN(id)) return response.status(400).send('Id must be a number.');
+    if (isNaN(id)) 
+        return response.status(400).send('Id must be a number.');
           
     try {
         const selected = await pool.query('SELECT * FROM dizziness WHERE id = $1', [id]);
@@ -36,7 +37,8 @@ async function getDizziness(request, response) {
 
 async function createDizziness(request, response) {
     const result = validate(request);
-    if (result.error) return response.status(400).send(result.error.details[0].message);
+    if (result.error) 
+        return response.status(400).send(result.error.details[0].message);
 
     try {
         const query = 'INSERT INTO dizziness (level, note) VALUES ($1, $2) RETURNING *';
