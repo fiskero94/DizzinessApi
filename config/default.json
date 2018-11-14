@@ -1,0 +1,12 @@
+{
+    "api": {
+        "port": 4000
+    },
+    "database": {
+        "user": "postgres",
+        "host": "localhost",
+        "database": "dizziness",
+        "password": "admin",
+        "port": 5432
+    }
+}
