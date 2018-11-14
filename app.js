@@ -13,6 +13,7 @@ app.use(helmet());
 
 // Routes
 app.use('/api/dizziness', require('./routes/dizziness'));
+app.use('/api/exercise', require('./routes/exercise'));
 
 // Run
 app.listen(apiConfig.port, () => console.log('Listening on port ' + apiConfig.port + '...'));
