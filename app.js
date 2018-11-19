@@ -12,8 +12,8 @@ app.use(express.json());
 app.use(helmet());
 
 // Routes
-app.use('/api/patients', require('./routes/patients'));
-app.use('/api/dizzinesses', require('./routes/dizzinesses'));
+app.use('/v1/patients', require('./routes/patients'));
+app.use('/v1/dizzinesses', require('./routes/dizzinesses'));
 
 // Run
 app.listen(apiConfig.port, () => console.log('Listening on port ' + apiConfig.port + '...'));
