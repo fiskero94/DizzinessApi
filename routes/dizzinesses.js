@@ -3,13 +3,13 @@ const router = express.Router();
 const Joi = require('joi');
 const pool = require('../database/pool');
 
-router.get('/', getAllDizziness);
+router.get('/', getAllDizzinesses);
 router.get('/:id', getDizziness);
 router.post('/', createDizziness);
 router.put('/:id', updateDizziness);
 router.delete('/:id', deleteDizziness);
 
-async function getAllDizziness(request, response) {
+async function getAllDizzinesses(request, response) {
     try {
         const selected = await pool.query('SELECT * FROM dizziness');
         return response.send(selected.rows);
@@ -76,7 +76,7 @@ async function deleteDizziness(request, response) {
 function validate(request) {
     return Joi.validate(request.body, {
         level: Joi.number().min(1).max(10).required(),
-        note: Joi.string().allow('').max(1024).required(),
+        note: Joi.string().allow('').max(1000).required(),
     });
 }
 
