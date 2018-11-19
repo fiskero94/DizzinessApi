@@ -17,8 +17,7 @@ $$ LANGUAGE sql;
 
 CREATE TYPE USERTYPE AS ENUM (
     'patient',
-    'physiotherapist',
-    'admin'
+    'physiotherapist'
 );
 
 CREATE TYPE SEX AS ENUM (
@@ -57,7 +56,7 @@ CREATE TABLE UserBase (
 );
 
 CREATE TABLE Patient (
-    user_id BIGINT REFERENCES UserBase NOT NULL,
+    user_id BIGINT REFERENCES UserBase NOT NULL PRIMARY KEY,
     location_id BIGINT REFERENCES location,
     birth_date DATE,
     sex SEX,
@@ -72,4 +71,91 @@ CREATE TABLE Dizziness (
     note TEXT NOT NULL,
     created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc(),
     updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc()
+);
+
+CREATE TABLE Department(
+    id BIGSERIAL PRIMARY KEY,
+    location_id BIGINT REFERENCES location,
+    name TEXT NOT NULL,
+    phone TEXT NOT NULL,
+    created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc(),
+    updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc()
+);
+
+CREATE TABLE Physiotherapist (
+    user_id BIGINT REFERENCES UserBase NOT NULL PRIMARY KEY,
+    department_id BIGINT REFERENCES Department NOT NULL 
+);
+
+CREATE TABLE Request(
+    id BIGSERIAL PRIMARY KEY,
+    physiotherapist_id BIGINT REFERENCES Physiotherapist NOT NULL,
+    patient_id BIGINT REFERENCES Patient NOT NULL,
+    accepted BOOLEAN NOT NULL,
+    created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc()
+);
+
+CREATE TABLE Period(
+    request_id BIGINT REFERENCES Request NOT NULL PRIMARY KEY,
+    start_date TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc(),
+    end_date TIMESTAMP WITH TIME ZONE
+);
+
+CREATE TABLE JournalEntry(
+    id BIGSERIAL PRIMARY KEY,
+    patient_id BIGINT REFERENCES Patient NOT NULL,
+    note TEXT NOT NULL,
+    created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc(),
+    updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc()
+);
+
+CREATE TABLE StepCount(
+    id BIGSERIAL PRIMARY KEY,
+    patient_id BIGINT REFERENCES Patient NOT NULL,
+    count INT NOT NULL,
+    date DATE NOT NULL
+);
+
+CREATE TABLE Exercise(
+    id BIGSERIAL PRIMARY KEY,
+    author_id BIGINT REFERENCES Physiotherapist,
+    name TEXT NOT NULL,
+    description TEXT,
+    created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc(),
+    updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc()
+);
+
+CREATE TABLE ExerciseFeedback(
+    id BIGSERIAL PRIMARY KEY,
+    exercise_id BIGINT REFERENCES Exercise NOT NULL,
+    dizziness_id BIGINT REFERENCES Dizziness NOT NULL,
+    patient_id BIGINT REFERENCES Patient NOT NULL,
+    dizziness_given BOOLEAN NOT NULL
+);
+
+CREATE TABLE ExerciseFavorite(
+    exercise_id BIGINT REFERENCES Exercise NOT NULL,
+    patient_id BIGINT REFERENCES Patient NOT NULL
+);
+
+CREATE TABLE CustomExercise(
+    id BIGSERIAL PRIMARY KEY,
+    author_id BIGINT REFERENCES Physiotherapist,
+    name TEXT NOT NULL,
+    description TEXT,
+    created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc(),
+    updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc()
+);
+
+CREATE TABLE CustomExercisePatient(
+    custom_exercise_id BIGINT REFERENCES CustomExercise NOT NULL,
+    patient_id BIGINT REFERENCES Patient NOT NULL
+);
+
+CREATE TABLE Recommendation(
+    id BIGSERIAL PRIMARY KEY,
+    physiotherapist_id BIGINT REFERENCES Physiotherapist NOT NULL,
+    exercise_id BIGINT REFERENCES Exercise NOT NULL,
+    patient_id BIGINT REFERENCES Patient NOT NULL,
+    note TEXT NOT NULL
 );

@@ -56,8 +56,8 @@ INSERT INTO UserBase (type, first_name, last_name, email, password) VALUES ('pat
 INSERT INTO UserBase (type, first_name, last_name, email, password) VALUES ('patient', 'Amalie', 'Olsen', 'aolsen@hotmail.com');
 INSERT INTO UserBase (type, first_name, last_name, email, password) VALUES ('patient', 'Fie', 'Nielsen', 'nielsenfie@hotmail.com');
 
-INSERT INTO Patient (user_id, location_id, birth_date, sex, height, weight) VALUES (1, 1, 1973-02-25, 'male', 181, 74);
-INSERT INTO Patient (user_id, location_id, birth_date, sex, height, weight) VALUES (2, 2, 1965-08-11, 'male', 184, 85);
+INSERT INTO Physiotherapist (user_id, location_id, birth_date, sex, height, weight) VALUES (1, 1, 1973-02-25, 'male', 181, 74);
+INSERT INTO Physiotherapist (user_id, location_id, birth_date, sex, height, weight) VALUES (2, 2, 1965-08-11, 'male', 184, 85);
 INSERT INTO Patient (user_id, location_id, birth_date, sex, height, weight) VALUES (3, 3, 1957-03-05, 'female', 165, 60);
 INSERT INTO Patient (user_id, location_id, birth_date, sex, height, weight) VALUES (4, 4, 1943-11-08, 'male', 175, 91);
 INSERT INTO Patient (user_id, location_id, birth_date, sex, height, weight) VALUES (5, 5, 1961-09-18, 'male', 190, 110);
