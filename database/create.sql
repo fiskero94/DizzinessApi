@@ -58,6 +58,7 @@ CREATE TABLE UserBase (
 CREATE TABLE Patient (
     user_id BIGINT REFERENCES UserBase NOT NULL PRIMARY KEY,
     location_id BIGINT REFERENCES location,
+    phone TEXT,
     birth_date DATE,
     sex SEX,
     height SMALLINT,
