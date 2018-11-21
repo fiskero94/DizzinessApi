@@ -123,7 +123,7 @@ CREATE TABLE Exercise(
     description TEXT,
     created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc(),
     updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc(),
-    custom boolean
+    custom BOOLEAN NOT NULL
 );
 
 CREATE TABLE ExerciseFeedback(
