@@ -122,7 +122,8 @@ CREATE TABLE Exercise(
     name TEXT NOT NULL,
     description TEXT,
     created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc(),
-    updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc()
+    updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc(),
+    custom boolean
 );
 
 CREATE TABLE ExerciseFeedback(
@@ -138,17 +139,8 @@ CREATE TABLE ExerciseFavorite(
     patient_id BIGINT REFERENCES Patient NOT NULL
 );
 
-CREATE TABLE CustomExercise(
-    id BIGSERIAL PRIMARY KEY,
-    author_id BIGINT REFERENCES Physiotherapist,
-    name TEXT NOT NULL,
-    description TEXT,
-    created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc(),
-    updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc()
-);
-
 CREATE TABLE CustomExercisePatient(
-    custom_exercise_id BIGINT REFERENCES CustomExercise NOT NULL,
+    exercise_id BIGINT REFERENCES Exercise NOT NULL,
     patient_id BIGINT REFERENCES Patient NOT NULL
 );
 
