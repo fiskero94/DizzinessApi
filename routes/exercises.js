@@ -4,7 +4,7 @@ const Joi = require('joi');
 const pool = require('../database/pool');
 const auth = require('../middleware/auth');
 
-router.get('/', auth, getAllExercises);
+router.get('/', getAllExercises);
 
 async function getAllExercises(request, response) {
     try {
@@ -19,7 +19,7 @@ async function getAllExercises(request, response) {
             WHERE custom = false;`
             );
 
-        return response.send(selected.rows[0]);
+        return response.send(selected.rows);
     }
 
     catch(error) {

@@ -15,6 +15,7 @@ app.use(helmet());
 app.use('/v1/patients', require('./routes/patients'));
 app.use('/v1/dizzinesses', require('./routes/dizzinesses'));
 app.use('/v1/exercises', require ('./routes/exercises'));
+app.use('/v1/logins', require('./routes/logins'));
 
 // Run
 app.listen(apiConfig.port, () => console.log('Listening on port ' + apiConfig.port + '...'));
