@@ -20,6 +20,8 @@ async function getPatient(request, response) {
 }
 
 async function createPatient(request, response) {
+    console.log(request.body);
+    
     const result = validate(request);
     if (result.error) 
         return response.status(400).send(result.error.details[0].message);
@@ -44,7 +46,8 @@ async function createPatient(request, response) {
         await client.query('COMMIT');
 
         const token = jwt.sign({ id: id, type: 'patient' }, 'jwtPrivateKey');
-        return response.send(token);
+        console.log(token);
+        return response.send({ token: token });
     } catch(error) {
         await client.query('ROLLBACK');
 
@@ -52,6 +55,8 @@ async function createPatient(request, response) {
             return response.status(400).send('User already registered.');
 
         return response.status(500).send(error);
+    } finally {
+        client.release();
     }
 }
 
