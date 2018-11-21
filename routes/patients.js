@@ -2,26 +2,54 @@ const express = require('express');
 const router = express.Router();
 const Joi = require('joi');
 const pool = require('../database/pool');
+const auth = require('../middleware/auth');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-router.get('/', getAllPatients);
-router.get('/:id', getPatient);
+router.get('/', auth, getAllPatients);
+router.get('/:id', auth, getPatient);
 router.post('/', createPatient);
-router.put('/:id', updatePatient);
-router.delete('/:id', deletePatient);
+router.put('/:id', auth, updatePatient);
+router.delete('/:id', auth, deletePatient);
 
 async function getAllPatients(request, response) {
-
+    
 }
 
 async function getPatient(request, response) {
+    const id = parseInt(request.params.id);
+    if (isNaN(id)) return response.status(400).send('Id must be a number.');
+    
+    try {
+        const selected = await pool.query(`
+            SELECT 
+                UserBase.id, 
+                UserBase.first_name, 
+                UserBase.last_name, 
+                UserBase.email,
+                UserBase.created, 
+                UserBase.updated, 
+                Patient.location_id, 
+                Patient.phone,
+                Patient.birth_date, 
+                Patient.sex, 
+                Patient.height, 
+                Patient.weight 
+            FROM UserBase INNER JOIN Patient 
+            ON UserBase.id = Patient.user_id WHERE id = $1;`, 
+            [id]
+        );
 
+        if (selected.rows.length !== 1) 
+            return response.status(404).send('A patient with the given id could not be found.');
+
+        return response.send(selected.rows[0]);
+    } catch(error) {
+        return response.status(500).send(error.message);
+    }
 }
 
 async function createPatient(request, response) {
-    console.log(request.body);
-    
     const result = validate(request);
     if (result.error) 
         return response.status(400).send(result.error.details[0].message);
@@ -45,13 +73,16 @@ async function createPatient(request, response) {
         await client.query('INSERT INTO Patient(user_id) VALUES($1)', [ id ]);
         await client.query('COMMIT');
 
-        const token = jwt.sign({ id: id, type: 'patient' }, 'jwtPrivateKey');
-        console.log(token);
+        const token = jwt.sign({ 
+            sub: id, 
+            name: `${request.body.first_name} ${request.body.last_name}`, 
+            type: 'patient' 
+        }, 'jwtPrivateKey');
         return response.send({ token: token });
     } catch(error) {
         await client.query('ROLLBACK');
 
-        if (error.hasOwnProperty('code') && error.code == "23505")
+        if (error.hasOwnProperty('code') && error.code == "23505") 
             return response.status(400).send('User already registered.');
 
         return response.status(500).send(error);
