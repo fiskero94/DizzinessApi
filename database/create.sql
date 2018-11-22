@@ -132,7 +132,9 @@ CREATE TABLE ExerciseFeedback(
     exercise_id BIGINT REFERENCES Exercise NOT NULL,
     dizziness_id BIGINT REFERENCES Dizziness NOT NULL,
     patient_id BIGINT REFERENCES Patient NOT NULL,
-    dizziness_given BOOLEAN NOT NULL
+    dizziness_given BOOLEAN NOT NULL,
+    created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc(),
+    updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc()
 );
 
 CREATE TABLE ExerciseFavorite(
@@ -150,5 +152,7 @@ CREATE TABLE Recommendation(
     physiotherapist_id BIGINT REFERENCES Physiotherapist NOT NULL,
     exercise_id BIGINT REFERENCES Exercise NOT NULL,
     patient_id BIGINT REFERENCES Patient NOT NULL,
-    note TEXT NOT NULL
+    note TEXT NOT NULL,
+    created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc(),
+    updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc()
 );
