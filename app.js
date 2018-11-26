@@ -6,10 +6,12 @@ const apiConfig = config.get('api');
 const helmet = require('helmet');
 const express = require('express');
 const app = express();
+var morgan = require('morgan');
 
 // Middleware
 app.use(express.json());
 app.use(helmet());
+app.use(morgan('tiny'));
 
 // Routes
 app.use('/v1/patients', require('./routes/patients'));
