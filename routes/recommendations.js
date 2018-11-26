@@ -4,19 +4,21 @@ const Joi = require('joi');
 const pool = require('../database/pool');
 const auth = require('../middleware/auth');
 
-router.get('/', auth, getAllExercises);
+router.get('/', auth, getAllRecommendedExercises);
 
-async function getAllExercises(request, response) {
+async function getAllRecommendedExercises(request, response) {
     try {
         const selected = await pool.query(`
         SELECT id,
-            author_id,
-            name,
-            description,
-            created,
-            updated
-            FROM exercise
-            WHERE custom = false;`
+        physiotherapist_id,
+        exercise_id,
+        patient_id,
+        note,
+        updated,
+        created
+        FROM recommendation
+        WHERE patient_id = $1
+            `, [request.user.sub]
             );
 
         return response.send(selected.rows);

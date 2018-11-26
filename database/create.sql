@@ -126,6 +126,16 @@ CREATE TABLE Exercise(
     custom BOOLEAN NOT NULL
 );
 
+CREATE TABLE ExerciseFeedback(
+    id BIGSERIAL PRIMARY KEY,
+    exercise_id BIGINT REFERENCES Exercise NOT NULL,
+    dizziness_id BIGINT REFERENCES Dizziness NOT NULL,
+    patient_id BIGINT REFERENCES Patient NOT NULL,
+    dizziness_given BOOLEAN NOT NULL,
+    created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc(),
+    updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc()
+);
+
 CREATE TABLE ExerciseFavorite(
     exercise_id BIGINT REFERENCES Exercise NOT NULL,
     patient_id BIGINT REFERENCES Patient NOT NULL
@@ -141,5 +151,7 @@ CREATE TABLE Recommendation(
     physiotherapist_id BIGINT REFERENCES Physiotherapist NOT NULL,
     exercise_id BIGINT REFERENCES Exercise NOT NULL,
     patient_id BIGINT REFERENCES Patient NOT NULL,
-    note TEXT NOT NULL
+    note TEXT NOT NULL,
+    created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc(),
+    updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc()
 );
