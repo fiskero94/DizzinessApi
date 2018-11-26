@@ -17,7 +17,7 @@ app.use('/v1/dizzinesses', require('./routes/dizzinesses'));
 app.use('/v1/exercises', require ('./routes/exercises'));
 app.use('/v1/logins', require('./routes/logins'));
 app.use('/v1/customexercises', require('./routes/customexercises'));
-app.use('/v1/favoriteexercises', require('./routes/favoriteexercises'));
+app.use('/v1/patients/:userid/favoriteexercises', require('./routes/favoriteexercises'));
 app.use('/v1/recommendations', require('./routes/recommendations'));
 
 // Run
