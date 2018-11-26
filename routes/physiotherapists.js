@@ -7,6 +7,9 @@ const auth = require('../middleware/auth');
 router.get('/:id', auth, getPhysiotherapistById);
 
 async function getPhysiotherapistById(request, response) {
+    const id = parseInt(request.params.id);
+    if (isNaN(id)) return response.status(400).send('Id must be a number.');
+    
     try {
         const selected = await pool.query(`
             SELECT 
