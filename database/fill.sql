@@ -109,16 +109,24 @@ INSERT INTO Exercise(author_id, name, description, custom) VALUES (7, 'Raise Sho
 INSERT INTO Exercise(author_id, name, description, custom) VALUES (7, 'Turn Head', 'Look to your left and then your right and repeat', false);
 INSERT INTO Exercise(author_id, name, description, custom) VALUES (7, 'Touch Toes', 'Bend down and touch your toes and up again and repeat', true);
 INSERT INTO Exercise(author_id, name, description, custom) VALUES (7, 'Jumping Jacks without arms', 'Do standard jumping jack but without moving your arms', true);
+INSERT INTO Exercise(author_id, name, description, custom) VALUES (6, 'Genopret 1', 'Trin 1: Sid i en komfortabel position. Fokuser på et punkt i øjenhøjde med hovedet let foroverbøjet (ca. 20-30 grader). \n\nTrin 2: Fortsæt med at fokusere på punktet, mens du bevæger hovedet fra side til side. Husk at fokusere på punktet med øjnene, mens du bevæger hovedet!', false);
+INSERT INTO Exercise(author_id, name, description, custom) VALUES (6, 'Genopret 2', 'Trin 1: Sid i en komfortabel position. Fokuser på et punkt i øjenhøjde med hovedet let foroverbøjet (ca. 20-30 grader). \n\nTrin 2: Hovedet skal bevæges til højre og venstre side, men i tilfældig rækkefølge. Bevæg hovedet til hver side ca. 10-20 gange. Bevægelserne skal være med forskellig hastighed. \n\nHold hovedet i yderpositionen i et par sekunder, før du vender tilbage til startpositionen. \n\nHusk at fokusere på punktet med øjnene, mens du bevæger hovedet!', false);
+INSERT INTO Exercise(author_id, name, description, custom) VALUES (6, 'Genopret 3', 'Trin 1: Sid eller stå behageligt. \n\nTrin 2: Find 5 punkter (genstande) i rummet, en i midten, til højre, til venstre, i loftet og i gulvet. \n\nTrin 3: Bevæg hovedet for at se på de forskellige genstande du har udvalgt. Først i ordnet rækkefølge, derefter i vilkårlig rækkefølge. \n\nTrin 3: Gentag trin 1-2, hvor du får en hjælper til at sige, hvilken genstand du skal se på. \n\nTrin 4: Gentag Trin 2 og 3 gentagne gange (ca. 20 gange) 3 gange dagligt.', false);
+INSERT INTO Exercise(author_id, name, description, custom) VALUES (6, 'Genopret 4', 'Trin 1: Sid eller stå behageligt. Trin 2: Hold kroppen stille. Fokuser på et punkt, ca. en meter foran dig. Drej hovedet hurtigt (max 45 gr.) mod højre og hold hele tiden fokus mod punktet foran dig - Vent i 3 sek.. Drej hovedet tilbage til udgangsposition. Vent i 3 sek. Drej hovedet hurtigt (max 45 gr.) mod venstre og hold hele tiden fokus mod punktet foran dig - Vent i 3 sekunder. Drej hovedet tilbage til udgangsposition. \n\nTrin 3: Gentag trin 1-2, men denne gang med hovedet drejet 45 gr. mod højre. Fokuser på punktet foran dig. Prøv herefter at bevæge hovedet op og ned. \n\nTrin 4: Gentag Trin 2 og 3 gentagne gange (ca. 20 gange) 3 gange dagligt.', false);
+INSERT INTO Exercise(author_id, name, description, custom) VALUES (6, 'Erstat 1', 'Trin 1: Start med at stå med ryggen tæt på en væg med benene let spredte. \n\nTrin 2: Kryds det højre ben ind foran det venstre. Hold benet krydset i luften i 5 sekunder og før det tilbage til udgangspositionen. \n\nTrin 3: Gentag denne bevægelse med det venstre ben. \n\nTrin 4: Gentag Trin 1-3 ca. 20 gange, 3 gange dagligt.', false);
+INSERT INTO Exercise(author_id, name, description, custom) VALUES (6, 'Erstat 2', 'Trin 1: Start med at stå foran en væg med fødderne pegende fremad mod væggen. \n\nTrin 2: Bevæg dig langs væggen med sideskridt mod den ene ende og herefter den anden. \n\nTrin 3: Gentag øvelsen med lukkede øjne. \n\nTrin 4: Gentag trin 2 og 3 ca. 20 gange, 3 gange dagligt.', false);
+INSERT INTO Exercise(author_id, name, description, custom) VALUES (6, 'Erstat 3', 'Trin 1: Start med at stå foran en væg med fødderne pegende fremad mod væggen. \n\nTrin 2: Begynd at bevæge dig langs væggen ved at dreje dig 360 grader rundt igen og igen til du når den ene ende af væggen. Herefter ”ruller” du den anden vej, til du når den modsatte ende af væggen. \n\nTrin 3: Gentag øvelsen med lukkede øjne \n\nTrin 4: Gentag trin 2 og 3 ca. 20 gange.', false);
+INSERT INTO Exercise(author_id, name, description, custom) VALUES (6, 'Erstat 4', 'Trin 1: Start med at stå med siden til, tæt på en væg med benene let spredte. \n\nTrin 2: Gå tå-gang ligeud (a), diagonalt (b) og i en bue (c) mod den anden ende af væggen. \n\nTrin 3: Gå hæl-gang ligeud, diagonalt og i en bue mod den anden ende af væggen. \n\nTrin 4: Gentag trin 2 og 3 ca. 20 gange.', false);
 
+INSERT INTO ExerciseFavorite(exercise_id, patient_id) VALUES (3, 1);
 INSERT INTO ExerciseFavorite(exercise_id, patient_id) VALUES (4, 1);
-INSERT INTO ExerciseFavorite(exercise_id, patient_id) VALUES (2, 1);
 INSERT INTO ExerciseFavorite(exercise_id, patient_id) VALUES (2, 2);
 INSERT INTO ExerciseFavorite(exercise_id, patient_id) VALUES (3, 3);
 
-INSERT INTO CustomExercisePatient(exercise_id, patient_id) VALUES (1, 1);
-INSERT INTO CustomExercisePatient(exercise_id, patient_id) VALUES (2, 1);
-INSERT INTO CustomExercisePatient(exercise_id, patient_id) VALUES (3, 2);
-INSERT INTO CustomExercisePatient(exercise_id, patient_id) VALUES (4, 3);
+INSERT INTO CustomExercisePatient(exercise_id, patient_id) VALUES (5, 1);
+INSERT INTO CustomExercisePatient(exercise_id, patient_id) VALUES (6, 1);
+INSERT INTO CustomExercisePatient(exercise_id, patient_id) VALUES (6, 2);
+INSERT INTO CustomExercisePatient(exercise_id, patient_id) VALUES (5, 3);
 
 INSERT INTO Recommendation(physiotherapist_id, exercise_id, patient_id, note) VALUES (6, 1, 1, 'This exercise will be good for you');   
 INSERT INTO Recommendation(physiotherapist_id, exercise_id, patient_id, note) VALUES (6, 2, 1, 'This should fit for you');
