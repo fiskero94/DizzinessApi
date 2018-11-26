@@ -22,6 +22,9 @@ async function getPhysiotherapistById(request, response) {
             [id]
         );
 
+        if (selected.rows.length !== 1) 
+        return response.status(404).send('A physiotherapist with the given id could not be found.');
+
         return response.send(selected.rows[0]);
     }
 
