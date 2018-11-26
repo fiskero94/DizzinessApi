@@ -4,15 +4,20 @@ const Joi = require('joi');
 const pool = require('../database/pool');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const errors = require('../errors.js');
 
 router.post('/', createLogin);
 
 async function createLogin(request, response) {
-    const result = validate(request);
-    if (result.error) 
-        return response.status(400).send(result.error.details[0].message);
-
     try {
+        const result = validate(request);
+        if (result.error) {
+            return response.status(400).send({ 
+                code: errors.validation.code, 
+                message: result.error.details[0].message 
+            });
+        }
+
         const selected = await pool.query(`
             SELECT id, type, first_name, last_name, email, password 
             FROM UserBase WHERE email = $1`,
@@ -20,20 +25,27 @@ async function createLogin(request, response) {
         );
 
         if (selected.rows.length !== 1) 
-            return response.status(400).send('Invalid email or password.');
+            return response.status(400).send({ 
+                code: errors.invalidEmailOrPassword.code, 
+                message: errors.invalidEmailOrPassword.message
+            });
 
         const user = selected.rows[0];
         const validPassword = await bcrypt.compare(request.body.password, user.password);
-        if (!validPassword) return response.status(400).send('Invalid email or password.');
+        if (!validPassword) return response.status(400).send({ 
+            code: errors.invalidEmailOrPassword.code, 
+            message: errors.invalidEmailOrPassword.message
+        });
 
         const token = jwt.sign({ 
             sub: user.id, 
             name: `${user.first_name} ${user.last_name}`, 
             type: user.type 
         }, 'jwtPrivateKey');
+        
         return response.send({ token: token });
     } catch (error) {
-        return response.status(500).send(error.message);
+        return response.status(500).send({ code: errors.internalServerError.code, message: error.message });
     }
 }
 
