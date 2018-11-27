@@ -5,7 +5,6 @@ const pool = require('../database/pool');
 const auth = require('../middleware/auth');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const errors = require('../errors.js');
 
 router.get('/', auth, getAllPatients);
 router.get('/:id', auth, getPatient);
@@ -13,8 +12,23 @@ router.post('/', createPatient);
 router.put('/:id', auth, updatePatient);
 router.delete('/:id', auth, deletePatient);
 
-async function getAllPatients(request, response) {
-    
+async function getAllPatients(request, response) {//mangler specifikke patienter til physio
+    try {
+        const selected = await pool.query(`
+        SELECT location_id,
+            phone,
+            birth_date,
+            sex,
+            height,
+            weight
+        FROM Patient`
+        );
+        return response.send(selected.rows);
+    }
+
+    catch(error) {
+        return response.status(500).send(error.message);
+    }
 }
 
 async function getPatient(request, response) {
@@ -53,7 +67,7 @@ async function getPatient(request, response) {
 async function createPatient(request, response) {
     const result = validate(request);
     if (result.error) 
-        return response.status(400).send({ code: errors.validation.code, message: result.error.details[0].message });
+        return response.status(400).send(result.error.details[0].message);
 
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(request.body.password, salt);
@@ -83,14 +97,10 @@ async function createPatient(request, response) {
     } catch(error) {
         await client.query('ROLLBACK');
 
-        if (error.hasOwnProperty('code') && error.code == "23505") {
-            return response.status(400).send({ 
-                code: errors.userAlreadyRegistered.code, 
-                message: errors.userAlreadyRegistered.message
-            });
-        }
+        if (error.hasOwnProperty('code') && error.code == "23505") 
+            return response.status(400).send('User already registered.');
 
-        return response.status(500).send({ code: errors.internalServerError.code, message: error.message });
+        return response.status(500).send(error);
     } finally {
         client.release();
     }
