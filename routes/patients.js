@@ -97,8 +97,70 @@ async function createPatient(request, response) {
 }
 
 async function updatePatient(request, response) {
+    const id = parseInt(request.params.id);
+    if (isNaN(id)) return response.status(400).send('Id must be a number.');
 
+    const client = await pool.connect();
+    try {
+        await client.query('BEGIN');
+        const updatedPatient = await client.query(`
+            UPDATE Patient
+            SET 
+                location_id = $1,           
+                phone = $2,
+                birth_date = $3, 
+                sex = $4, 
+                height = $5, 
+                weight = $6                
+            WHERE user_id = $7 RETURNING *`, 
+            [request.body.location_id,
+            request.body.phone,
+            request.body.birth_date,
+            request.body.sex,
+            request.body.height,
+            request.body.weight,
+            id]
+
+        );  
+        const updatedUser = await client.query(`
+            UPDATE UserBase
+            SET
+                email = $1,
+                password = $2
+            WHERE id = $3 RETURNING *`,
+            [request.body.email,
+            request.body.password,
+            id]
+        );
+        
+        if (updatedPatient.rows.length !==1 || updatedUser.rows.length !==1 )
+            return response.status(404).send('A user with the given id could not be found.');
+        await client.query('COMMIT');
+        return response.send({
+            id: updatedUser.id,
+            first_name: updatedUser.first_name,
+            last_name: updatedUser.last_name,
+            password: updatedUser.password,
+            email: updatedUser.email,
+            created: updatedUser.created,
+            updated: updatedUser.updated,
+            location_id: updatedPatient.location_id,
+            phone: updatedPatient.phone,
+            birth_date: updatePatient.birth_date,
+            sex: updatedPatient.sex,
+            height: updatedPatient.height,
+            weight: updatedPatient.weight
+        });               
+    }      
+    catch(error) {
+        await client.query('ROLLBACK');
+        return response.status(500).send(error.message);      
+    }   
+    finally {
+        client.release();
+    }
 }
+
 
 async function deletePatient(request, response) {
 
