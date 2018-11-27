@@ -41,8 +41,10 @@ async function createDizziness(request, response) {
         return response.status(400).send(result.error.details[0].message);
 
     try {
-        const query = 'INSERT INTO dizziness (level, note) VALUES ($1, $2) RETURNING *';
+        const query = 'INSERT INTO dizziness (patient_id, exercise_id, level, note) VALUES ($1, $2, $3, $4) RETURNING *';
         const inserted = await pool.query(query, [
+            request.body.patient_id,
+            request.body.exercise_id,
             request.body.level, 
             request.body.note
         ]);
@@ -75,6 +77,8 @@ async function deleteDizziness(request, response) {
 
 function validate(request) {
     return Joi.validate(request.body, {
+        patient_id: Joi.number().required(),
+        exercise_id: Joi.number(),
         level: Joi.number().min(1).max(10).required(),
         note: Joi.string().allow('').max(1000).required(),
     });
