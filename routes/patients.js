@@ -145,21 +145,24 @@ async function updatePatient(request, response) {
         
         if (updatedPatient.rows.length !==1 || updatedUser.rows.length !==1 )
             return response.status(404).send('A user with the given id could not be found.');
+
+            console.log(updatedUser);
+
         await client.query('COMMIT');
         return response.send({
-            id: updatedUser.id,
-            first_name: updatedUser.first_name,
-            last_name: updatedUser.last_name,
-            password: updatedUser.password,
-            email: updatedUser.email,
-            created: updatedUser.created,
-            updated: updatedUser.updated,
-            location_id: updatedPatient.location_id,
-            phone: updatedPatient.phone,
-            birth_date: updatePatient.birth_date,
-            sex: updatedPatient.sex,
-            height: updatedPatient.height,
-            weight: updatedPatient.weight
+            id: updatedUser.rows[0].id,
+            first_name: updatedUser.rows[0].first_name,
+            last_name: updatedUser.rows[0].last_name,
+            password: updatedUser.rows[0].password,
+            email: updatedUser.rows[0].email,
+            created: updatedUser.rows[0].created,
+            updated: updatedUser.rows[0].updated,
+            location_id: updatedPatient.rows[0].location_id,
+            phone: updatedPatient.rows[0].phone,
+            birth_date: updatePatient.rows[0].birth_date,
+            sex: updatedPatient.rows[0].sex,
+            height: updatedPatient.rows[0].height,
+            weight: updatedPatient.rows[0].weight
         });               
     }      
     catch(error) {
