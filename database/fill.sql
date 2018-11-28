@@ -1,3 +1,5 @@
+\connect dizziness
+
 INSERT INTO Country (code, name) VALUES ('DK', 'Denmark');
 INSERT INTO Country (code, name) VALUES ('FO', 'Faroe Islands');
 INSERT INTO Country (code, name) VALUES ('DO', 'Dominican Republic');
@@ -63,14 +65,6 @@ INSERT INTO Patient (user_id, location_id, birth_date, sex, height, weight) VALU
 INSERT INTO Patient (user_id, location_id, birth_date, sex, height, weight) VALUES (4, 4, '1955-04-30', 'female', 170, 59);
 INSERT INTO Patient (user_id, location_id, birth_date, sex, height, weight) VALUES (5, 5, '1970-08-17', 'female', 177, 68);
 
-INSERT INTO Dizziness (user_id, level, note) VALUES (1, 7, 'Jeg er ret svimmel');
-INSERT INTO Dizziness (user_id, level, note) VALUES (2, 8, 'Meget svimmel i dag');
-INSERT INTO Dizziness (user_id, level, note) VALUES (2, 6, 'Ikke så svimmel denne uge');
-INSERT INTO Dizziness (user_id, level, note) VALUES (3, 9, '');
-INSERT INTO Dizziness (user_id, level, note) VALUES (4, 5, '');
-INSERT INTO Dizziness (user_id, level, note) VALUES (4, 8, 'Rigtig svimmel');
-INSERT INTO Dizziness (user_id, level, note) VALUES (5, 9, 'Værre i dag');
-
 INSERT INTO Organisation(location_id, name, phone) VALUES (1, 'Organisation Navn 1', 59285722);
 INSERT INTO Organisation(location_id, name, phone) VALUES (2, 'Organisation Navn 2', 52958354);
 
@@ -117,6 +111,14 @@ INSERT INTO Exercise(author_id, name, description, custom) VALUES (6, 'Erstat 1'
 INSERT INTO Exercise(author_id, name, description, custom) VALUES (6, 'Erstat 2', 'Trin 1: Start med at stå foran en væg med fødderne pegende fremad mod væggen. \n\nTrin 2: Bevæg dig langs væggen med sideskridt mod den ene ende og herefter den anden. \n\nTrin 3: Gentag øvelsen med lukkede øjne. \n\nTrin 4: Gentag trin 2 og 3 ca. 20 gange, 3 gange dagligt.', false);
 INSERT INTO Exercise(author_id, name, description, custom) VALUES (6, 'Erstat 3', 'Trin 1: Start med at stå foran en væg med fødderne pegende fremad mod væggen. \n\nTrin 2: Begynd at bevæge dig langs væggen ved at dreje dig 360 grader rundt igen og igen til du når den ene ende af væggen. Herefter ”ruller” du den anden vej, til du når den modsatte ende af væggen. \n\nTrin 3: Gentag øvelsen med lukkede øjne \n\nTrin 4: Gentag trin 2 og 3 ca. 20 gange.', false);
 INSERT INTO Exercise(author_id, name, description, custom) VALUES (6, 'Erstat 4', 'Trin 1: Start med at stå med siden til, tæt på en væg med benene let spredte. \n\nTrin 2: Gå tå-gang ligeud (a), diagonalt (b) og i en bue (c) mod den anden ende af væggen. \n\nTrin 3: Gå hæl-gang ligeud, diagonalt og i en bue mod den anden ende af væggen. \n\nTrin 4: Gentag trin 2 og 3 ca. 20 gange.', false);
+
+INSERT INTO Dizziness (patient_id, exercise_id, level, note) VALUES (1, 1, 7, 'Jeg er ret svimmel');
+INSERT INTO Dizziness (patient_id, exercise_id, level, note) VALUES (2, 2, 8, 'Meget svimmel i dag');
+INSERT INTO Dizziness (patient_id, exercise_id, level, note) VALUES (2, 4, 6, 'Ikke så svimmel denne uge');
+INSERT INTO Dizziness (patient_id, exercise_id, level, note) VALUES (3, 3, 9, '');
+INSERT INTO Dizziness (patient_id, exercise_id, level, note) VALUES (4, 3, 5, '');
+INSERT INTO Dizziness (patient_id, exercise_id, level, note) VALUES (4, 5, 8, 'Rigtig svimmel');
+INSERT INTO Dizziness (patient_id, exercise_id, level, note) VALUES (5, 2, 9, 'Værre i dag');
 
 INSERT INTO ExerciseFavorite(exercise_id, patient_id) VALUES (3, 1);
 INSERT INTO ExerciseFavorite(exercise_id, patient_id) VALUES (4, 1);

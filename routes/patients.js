@@ -5,7 +5,6 @@ const pool = require('../database/pool');
 const auth = require('../middleware/auth');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const errors = require('../errors.js');
 
 router.get('/', auth, getAllPatients);
 router.get('/:id', auth, getPatient);
@@ -13,8 +12,23 @@ router.post('/', createPatient);
 router.put('/:id', auth, updatePatient);
 router.delete('/:id', auth, deletePatient);
 
-async function getAllPatients(request, response) {
-    
+async function getAllPatients(request, response) {//mangler specifikke patienter til physio
+    try {
+        const selected = await pool.query(`
+        SELECT location_id,
+            phone,
+            birth_date,
+            sex,
+            height,
+            weight
+        FROM Patient`
+        );
+        return response.send(selected.rows);
+    }
+
+    catch(error) {
+        return response.status(500).send(error.message);
+    }
 }
 
 async function getPatient(request, response) {
@@ -53,7 +67,7 @@ async function getPatient(request, response) {
 async function createPatient(request, response) {
     const result = validate(request);
     if (result.error) 
-        return response.status(400).send({ code: errors.validation.code, message: result.error.details[0].message });
+        return response.status(400).send(result.error.details[0].message);
 
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(request.body.password, salt);
@@ -83,21 +97,94 @@ async function createPatient(request, response) {
     } catch(error) {
         await client.query('ROLLBACK');
 
-        if (error.hasOwnProperty('code') && error.code == "23505") {
-            return response.status(400).send({ 
-                code: errors.userAlreadyRegistered.code, 
-                message: errors.userAlreadyRegistered.message
-            });
-        }
+        if (error.hasOwnProperty('code') && error.code == "23505") 
+            return response.status(400).send('User already registered.');
 
-        return response.status(500).send({ code: errors.internalServerError.code, message: error.message });
+        return response.status(500).send(error);
     } finally {
         client.release();
     }
 }
 
 async function updatePatient(request, response) {
+    const id = parseInt(request.params.id);
+    if (isNaN(id)) return response.status(400).send('Id must be a number.');
 
+    const client = await pool.connect();
+    try {
+        await client.query('BEGIN');
+        const updatedPatient = await client.query(`
+            UPDATE Patient
+            SET 
+                location_id = $1,           
+                phone = $2,
+                birth_date = $3, 
+                sex = $4, 
+                height = $5, 
+                weight = $6                
+            WHERE user_id = $7 RETURNING *`, 
+            [request.body.location_id,
+            request.body.phone,
+            request.body.birth_date,
+            request.body.sex,
+            request.body.height,
+            request.body.weight,
+            id]
+
+        );  
+        const updatedUser = await client.query(`
+            UPDATE UserBase
+            SET
+                email = $1,
+                password = $2
+            WHERE id = $3 RETURNING *`,
+            [request.body.email,
+            request.body.password,
+            id]
+        );
+        
+        if (updatedPatient.rows.length !==1 || updatedUser.rows.length !==1 )
+            return response.status(404).send('A user with the given id could not be found.');
+
+        console.log(updatedUser.rows[0].id);
+
+        let patient = {
+            id: updatedUser.rows[0].id,
+            first_name: updatedUser.rows[0].first_name,
+            last_name: updatedUser.rows[0].last_name,
+            email: updatedUser.rows[0].email,
+            created: updatedUser.rows[0].created,
+            updated: updatedUser.rows[0].updated
+        };
+
+        if (typeof updatedPatient.rows[0].location_id !== 'undefined' ) 
+            patient.location_id = updatedPatient.rows[0].location_id;
+
+        if (typeof updatedPatient.rows[0].phone !== 'undefined' ) 
+            patient.phone = updatedPatient.rows[0].phone;
+
+        if (typeof updatedPatient.rows[0].birth_date !== 'undefined' ) 
+            patient.birth_date = updatedPatient.rows[0].birth_date;
+
+        if (typeof updatedPatient.rows[0].sex !== 'undefined' ) 
+            patient.sex = updatedPatient.rows[0].sex;
+        
+        if (typeof updatedPatient.rows[0].height !== 'undefined' ) 
+            patient.height = updatedPatient.rows[0].height;
+
+        if (typeof updatedPatient.rows[0].weight !== 'undefined' ) 
+            patient.weight = updatedPatient.rows[0].weight;
+
+        await client.query('COMMIT');
+        return response.send(patient);               
+    }      
+    catch(error) {
+        await client.query('ROLLBACK');
+        return response.status(500).send(error.message);      
+    }   
+    finally {
+        client.release();
+    }
 }
 
 async function deletePatient(request, response) {

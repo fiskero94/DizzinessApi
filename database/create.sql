@@ -63,16 +63,6 @@ CREATE TABLE Patient (
     weight SMALLINT
 );
 
-CREATE TABLE Dizziness (
-    id BIGSERIAL PRIMARY KEY,
-    user_id BIGINT REFERENCES UserBase NOT NULL,
-    exercise_id BIGINT REFERENCES Exercise,
-    level SMALLINT NOT NULL,
-    note TEXT NOT NULL,
-    created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc(),
-    updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc()
-);
-
 CREATE TABLE Organisation(
     id BIGSERIAL PRIMARY KEY,
     location_id BIGINT REFERENCES location,
@@ -124,6 +114,16 @@ CREATE TABLE Exercise(
     created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc(),
     updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc(),
     custom BOOLEAN NOT NULL
+);
+
+CREATE TABLE Dizziness (
+    id BIGSERIAL PRIMARY KEY,
+    patient_id BIGINT REFERENCES Patient NOT NULL,
+    exercise_id BIGINT REFERENCES Exercise,
+    level SMALLINT NOT NULL,
+    note TEXT NOT NULL,
+    created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc(),
+    updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc()
 );
 
 CREATE TABLE ExerciseFavorite(

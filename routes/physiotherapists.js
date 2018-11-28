@@ -9,7 +9,7 @@ router.get('/:id', auth, getPhysiotherapistById);
 async function getPhysiotherapistById(request, response) {
     const id = parseInt(request.params.id);
     if (isNaN(id)) return response.status(400).send('Id must be a number.');
-    
+
     try {
         const selected = await pool.query(`
             SELECT 
@@ -19,7 +19,7 @@ async function getPhysiotherapistById(request, response) {
                 UserBase.email,
                 UserBase.created, 
                 UserBase.updated, 
-                Physiotherapist.organisation_id,
+                Physiotherapist.organisation_id
             FROM UserBase INNER JOIN Physiotherapist 
             ON UserBase.id = Physiotherapist.user_id WHERE id = $1;`, 
             [id]
