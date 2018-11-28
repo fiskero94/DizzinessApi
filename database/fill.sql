@@ -1,3 +1,5 @@
+\connect dizziness
+
 INSERT INTO Country (code, name) VALUES ('DK', 'Denmark');
 INSERT INTO Country (code, name) VALUES ('FO', 'Faroe Islands');
 INSERT INTO Country (code, name) VALUES ('DO', 'Dominican Republic');
