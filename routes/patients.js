@@ -187,7 +187,6 @@ async function updatePatient(request, response) {
     }
 }
 
-
 async function deletePatient(request, response) {
 
 }
