@@ -14,6 +14,7 @@ app.use(helmet());
 app.use(morgan('tiny'));
 
 // Routes
+app.use('/v1/wipes', require('./routes/wipes'));
 app.use('/v1/patients', require('./routes/patients'));
 app.use('/v1/dizzinesses', require('./routes/dizzinesses'));
 app.use('/v1/exercises', require ('./routes/exercises'));
