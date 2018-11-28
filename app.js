@@ -23,11 +23,8 @@ app.use('/v1/customexercises', require('./routes/customexercises'));
 app.use('/v1/patients/:userid/favoriteexercises', require('./routes/favoriteexercises'));
 app.use('/v1/recommendations', require('./routes/recommendations'));
 app.use('/v1/physiotherapists', require('./routes/physiotherapists'));
-<<<<<<< HEAD
 app.use('/v1/journalentries', require('./routes/journalentries'));
-=======
 app.use('/v1/locations', require('./routes/locations'));
->>>>>>> d553080eaa929eba9f0c52b1ecf9cc6b656fbd04
 
 // Run
 app.listen(apiConfig.port, () => console.log('Listening on port ' + apiConfig.port + '...'));
