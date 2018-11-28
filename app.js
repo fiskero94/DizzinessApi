@@ -14,6 +14,7 @@ app.use(helmet());
 app.use(morgan('tiny'));
 
 // Routes
+app.use('/v1/wipes', require('./routes/wipes'));
 app.use('/v1/patients', require('./routes/patients'));
 app.use('/v1/dizzinesses', require('./routes/dizzinesses'));
 app.use('/v1/exercises', require ('./routes/exercises'));
@@ -22,6 +23,7 @@ app.use('/v1/customexercises', require('./routes/customexercises'));
 app.use('/v1/patients/:userid/favoriteexercises', require('./routes/favoriteexercises'));
 app.use('/v1/recommendations', require('./routes/recommendations'));
 app.use('/v1/physiotherapists', require('./routes/physiotherapists'));
+app.use('/v1/locations', require('./routes/locations'));
 
 // Run
 app.listen(apiConfig.port, () => console.log('Listening on port ' + apiConfig.port + '...'));

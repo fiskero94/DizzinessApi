@@ -11,12 +11,10 @@ router.post('/', createLogin);
 async function createLogin(request, response) {
     try {
         const result = validate(request);
-        if (result.error) {
-            return response.status(400).send({ 
-                code: errors.validation.code, 
-                message: result.error.details[0].message 
-            });
-        }
+        if (result.error) return response.status(400).send({ 
+            code: errors.validation.code, 
+            message: result.error.details[0].message 
+        });
 
         const selected = await pool.query(`
             SELECT id, type, first_name, last_name, email, password 
@@ -24,11 +22,10 @@ async function createLogin(request, response) {
             [request.body.email]
         );
 
-        if (selected.rows.length !== 1) 
-            return response.status(400).send({ 
-                code: errors.invalidEmailOrPassword.code, 
-                message: errors.invalidEmailOrPassword.message
-            });
+        if (selected.rows.length !== 1) return response.status(400).send({ 
+            code: errors.invalidEmailOrPassword.code, 
+            message: errors.invalidEmailOrPassword.message
+        });
 
         const user = selected.rows[0];
         const validPassword = await bcrypt.compare(request.body.password, user.password);
