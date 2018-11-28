@@ -146,24 +146,37 @@ async function updatePatient(request, response) {
         if (updatedPatient.rows.length !==1 || updatedUser.rows.length !==1 )
             return response.status(404).send('A user with the given id could not be found.');
 
-            console.log(updatedUser);
+        console.log(updatedUser.rows[0].id);
 
-        await client.query('COMMIT');
-        return response.send({
+        let patient = {
             id: updatedUser.rows[0].id,
             first_name: updatedUser.rows[0].first_name,
             last_name: updatedUser.rows[0].last_name,
-            password: updatedUser.rows[0].password,
             email: updatedUser.rows[0].email,
             created: updatedUser.rows[0].created,
-            updated: updatedUser.rows[0].updated,
-            location_id: updatedPatient.rows[0].location_id,
-            phone: updatedPatient.rows[0].phone,
-            birth_date: updatePatient.rows[0].birth_date,
-            sex: updatedPatient.rows[0].sex,
-            height: updatedPatient.rows[0].height,
-            weight: updatedPatient.rows[0].weight
-        });               
+            updated: updatedUser.rows[0].updated
+        };
+
+        if (typeof updatedPatient.rows[0].location_id !== 'undefined' ) 
+            patient.location_id = updatedPatient.rows[0].location_id;
+
+        if (typeof updatedPatient.rows[0].phone !== 'undefined' ) 
+            patient.phone = updatedPatient.rows[0].phone;
+
+        if (typeof updatedPatient.rows[0].birth_date !== 'undefined' ) 
+            patient.birth_date = updatedPatient.rows[0].birth_date;
+
+        if (typeof updatedPatient.rows[0].sex !== 'undefined' ) 
+            patient.sex = updatedPatient.rows[0].sex;
+        
+        if (typeof updatedPatient.rows[0].height !== 'undefined' ) 
+            patient.height = updatedPatient.rows[0].height;
+
+        if (typeof updatedPatient.rows[0].weight !== 'undefined' ) 
+            patient.weight = updatedPatient.rows[0].weight;
+
+        await client.query('COMMIT');
+        return response.send(patient);               
     }      
     catch(error) {
         await client.query('ROLLBACK');
