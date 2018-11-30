@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const Joi = require('joi');
 const pool = require('../database/pool');
+const auth = require('../middleware/auth');
 
-router.get('/', getAllDizzinesses);
+router.get('/', auth, getAllDizzinesses);
 router.get('/:id', getDizziness);
 router.post('/', createDizziness);
 router.put('/:id', updateDizziness);
@@ -11,9 +12,23 @@ router.delete('/:id', deleteDizziness);
 
 async function getAllDizzinesses(request, response) {
     try {
-        const selected = await pool.query('SELECT * FROM dizziness');
+        const selected = await pool.query(`
+        SELECT id,
+            patient_id,
+            exercise_id,
+            level,
+            note,
+            created,
+            updated
+            FROM dizziness
+            WHERE patient_id = $1 AND CAST (created AS DATE) = $2
+        `, [request.user.sub, request.query.date]
+            );
+
         return response.send(selected.rows);
-    } catch(error) {
+    }
+
+    catch(error) {
         return response.status(500).send(error.message);
     }
 }

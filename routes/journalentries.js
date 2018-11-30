@@ -9,14 +9,14 @@ router.get('/', auth, getAllJournalEntries);
 async function getAllJournalEntries(request, response) {
     try {
         const selected = await pool.query(`
-        SELECT 
-            id,
+        SELECT id,
             patient_id,
             note,
             created,
             updated
             FROM journalentry
-            WHERE patient_id = $1`, [request.user.sub]
+            WHERE patient_id = $1 AND CAST (created AS DATE) = $2
+        `, [request.user.sub, request.query.date]
             );
 
         return response.send(selected.rows);

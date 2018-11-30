@@ -83,13 +83,16 @@ INSERT INTO Period(request_id) VALUES (3);
 INSERT INTO Period(request_id) VALUES (4);
 INSERT INTO Period(request_id) VALUES (5);
 
-INSERT INTO JournalEntry(patient_id, note) VALUES (1, 'Det gik godt');
-INSERT INTO JournalEntry(patient_id, note) VALUES (1, 'Jeg har det lidt bedre');
-INSERT INTO JournalEntry(patient_id, note) VALUES (1, 'I dag har jeg det ikke så godt');
-INSERT INTO JournalEntry(patient_id, note) VALUES (1, 'Værre i dag');
-INSERT INTO JournalEntry(patient_id, note) VALUES (2, 'Ikke så godt');
-INSERT INTO JournalEntry(patient_id, note) VALUES (2, 'Bedre');
-INSERT INTO JournalEntry(patient_id, note) VALUES (2, 'Meget godt');
+INSERT INTO JournalEntry(patient_id, note, created) VALUES (1, 'Det gik godt', '2018-11-21 14:42:22');
+INSERT INTO JournalEntry(patient_id, note, created) VALUES (1, 'Jeg har det lidt bedre', '2018-11-22 15:43:23');
+INSERT INTO JournalEntry(patient_id, note, created) VALUES (1, 'I dag har jeg det ikke så godt', '2018-11-23 16:44:24');
+INSERT INTO JournalEntry(patient_id, note, created) VALUES (1, 'Værre i dag', '2018-10-14 14:42:22');
+INSERT INTO JournalEntry(patient_id, note, created) VALUES (1, 'Aliquam erat volutpat. Duis tempor orci vitae diam tempor, sit amet convallis felis congue. Nullam id sapien dapibus, dapibus dolor.', '2018-10-15 09:33:57');
+INSERT INTO JournalEntry(patient_id, note, created) VALUES (1, 'Integer hendrerit enim vitae nunc euismod vestibulum. Phasellus lobortis purus in nulla convallis convallis. Ut eu arcu ut libero lobortis.', '2018-10-15 11:55:56');
+INSERT INTO JournalEntry(patient_id, note, created) VALUES (1, 'Aenean accumsan finibus suscipit. Morbi velit nisi, molestie non tincidunt eu, consequat in nibh. Nullam pretium lectus at convallis sollicitudin.', '2018-10-15 13:17:48');
+INSERT INTO JournalEntry(patient_id, note, created) VALUES (1, 'Morbi eget faucibus risus. Duis nec sollicitudin leo. Suspendisse potenti. Phasellus et arcu non ligula gravida fermentum vitae id nulla.', '2018-10-15 17:28:32');
+INSERT INTO JournalEntry(patient_id, note) VALUES (1, 'Bedre');
+INSERT INTO JournalEntry(patient_id, note) VALUES (1, 'Meget godt');
 
 INSERT INTO StepCount(patient_id, count, date) VALUES (1, 400, '2018-11-05');
 INSERT INTO StepCount(patient_id, count, date) VALUES (1, 809, '2018-11-06');
@@ -112,7 +115,9 @@ INSERT INTO Exercise(author_id, name, description, custom) VALUES (6, 'Erstat 2'
 INSERT INTO Exercise(author_id, name, description, custom) VALUES (6, 'Erstat 3', 'Trin 1: Start med at stå foran en væg med fødderne pegende fremad mod væggen. \n\nTrin 2: Begynd at bevæge dig langs væggen ved at dreje dig 360 grader rundt igen og igen til du når den ene ende af væggen. Herefter ”ruller” du den anden vej, til du når den modsatte ende af væggen. \n\nTrin 3: Gentag øvelsen med lukkede øjne \n\nTrin 4: Gentag trin 2 og 3 ca. 20 gange.', false);
 INSERT INTO Exercise(author_id, name, description, custom) VALUES (6, 'Erstat 4', 'Trin 1: Start med at stå med siden til, tæt på en væg med benene let spredte. \n\nTrin 2: Gå tå-gang ligeud (a), diagonalt (b) og i en bue (c) mod den anden ende af væggen. \n\nTrin 3: Gå hæl-gang ligeud, diagonalt og i en bue mod den anden ende af væggen. \n\nTrin 4: Gentag trin 2 og 3 ca. 20 gange.', false);
 
-INSERT INTO Dizziness (patient_id, exercise_id, level, note) VALUES (1, 1, 7, 'Jeg er ret svimmel');
+INSERT INTO Dizziness (patient_id, exercise_id, level, note, created) VALUES (1, 8, 4, 'Nunc vel augue vel orci faucibus pharetra a quis augue. Aenean dictum enim eu nulla blandit varius. In ut tristique.', '2018-10-15 12:42:23');
+INSERT INTO Dizziness (patient_id, level, note, created) VALUES (1, 6, 'Etiam dapibus, tellus eget consequat bibendum, ante metus eleifend orci, quis tristique nibh urna molestie lacus. Nulla condimentum ante eu.', '2018-10-15 14:57:43');
+INSERT INTO Dizziness (patient_id, exercise_id, level, note, created) VALUES (1, 13, 3, 'In at velit facilisis urna rhoncus accumsan in tristique mauris. Etiam finibus ultricies feugiat. Aenean eu tincidunt nibh. Etiam semper.', '2018-10-15 18:23:47');
 INSERT INTO Dizziness (patient_id, exercise_id, level, note) VALUES (2, 2, 8, 'Meget svimmel i dag');
 INSERT INTO Dizziness (patient_id, exercise_id, level, note) VALUES (2, 4, 6, 'Ikke så svimmel denne uge');
 INSERT INTO Dizziness (patient_id, exercise_id, level, note) VALUES (3, 3, 9, '');
