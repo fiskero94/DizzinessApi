@@ -113,17 +113,6 @@ CREATE TABLE Period(
     end_date TIMESTAMP WITH TIME ZONE
 );
 
-CREATE TABLE JournalEntry(
-    id BIGSERIAL PRIMARY KEY,
-    patient_id BIGINT REFERENCES Patient NOT NULL,
-    note TEXT NOT NULL,
-    created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc(),
-    updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc()
-);
-
-CREATE TRIGGER JournalEntryUpdated BEFORE UPDATE ON JournalEntry
-FOR EACH ROW EXECUTE PROCEDURE UpdateUpdated();
-
 CREATE TABLE StepCount(
     id BIGSERIAL PRIMARY KEY,
     patient_id BIGINT REFERENCES Patient NOT NULL,
@@ -139,11 +128,20 @@ CREATE TABLE Exercise(
     custom BOOLEAN NOT NULL,
     created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc(),
     updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc()
-    
 );
 
 CREATE TRIGGER ExerciseUpdated BEFORE UPDATE ON Exercise
 FOR EACH ROW EXECUTE PROCEDURE UpdateUpdated();
+
+CREATE TABLE ExerciseFavorite(
+    exercise_id BIGINT REFERENCES Exercise NOT NULL,
+    patient_id BIGINT REFERENCES Patient NOT NULL
+);
+
+CREATE TABLE CustomExercisePatient(
+    exercise_id BIGINT REFERENCES Exercise NOT NULL,
+    patient_id BIGINT REFERENCES Patient NOT NULL
+);
 
 CREATE TABLE Dizziness (
     id BIGSERIAL PRIMARY KEY,
@@ -158,15 +156,16 @@ CREATE TABLE Dizziness (
 CREATE TRIGGER DizzinessUpdated BEFORE UPDATE ON Dizziness
 FOR EACH ROW EXECUTE PROCEDURE UpdateUpdated();
 
-CREATE TABLE ExerciseFavorite(
-    exercise_id BIGINT REFERENCES Exercise NOT NULL,
-    patient_id BIGINT REFERENCES Patient NOT NULL
+CREATE TABLE JournalEntry(
+    id BIGSERIAL PRIMARY KEY,
+    patient_id BIGINT REFERENCES Patient NOT NULL,
+    note TEXT NOT NULL,
+    created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc(),
+    updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc()
 );
 
-CREATE TABLE CustomExercisePatient(
-    exercise_id BIGINT REFERENCES Exercise NOT NULL,
-    patient_id BIGINT REFERENCES Patient NOT NULL
-);
+CREATE TRIGGER JournalEntryUpdated BEFORE UPDATE ON JournalEntry
+FOR EACH ROW EXECUTE PROCEDURE UpdateUpdated();
 
 CREATE TABLE Recommendation(
     id BIGSERIAL PRIMARY KEY,
