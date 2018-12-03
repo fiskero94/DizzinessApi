@@ -56,7 +56,7 @@ async function createLocation(request, response) {
 
     try {
         const inserted = await pool.query(`
-            INSERT INTO location (zip_code, country_code, address) 
+            INSERT INTO Location (zip_code, country_code, address) 
             VALUES ($1, $2, $3) RETURNING *`,    
             [request.body.zip_code,
             request.body.country_code,
@@ -65,6 +65,9 @@ async function createLocation(request, response) {
 
         return response.send(inserted.rows[0]);
     } catch(error) {
+        if (error.hasOwnProperty('code') && error.code == "23503") 
+            return response.status(400).send(errors.cityNotFound);
+        
         return response.status(500).send(errors.internalServerError);
     }
 }
@@ -73,7 +76,30 @@ async function updateLocation(request, response) {
     const id = parseInt(request.params.id);
     if (isNaN(id)) return response.status(400).send(errors.urlParameterNumber);
 
+    const result = validate(request);
+    if (result.error) {
+        return response.status(400).send({ 
+            code: errors.validation.code, 
+            message: result.error.details[0].message 
+        });
+    }
 
+    try {
+        const updated = pool.query(
+            'UPDATE Location SET zip_code = $1, country_code = $2, address = $3 WHERE id = $4',
+            [request.body.zip_code, request.body.country_code, address, id]
+        );
+
+        if (updated.rows.length !== 1)
+            return response.status(404).send(errors.elementNotFound);
+
+        return response.send(updated.rows[0]);
+    } catch(error) {
+        if (error.hasOwnProperty('code') && error.code == "23503") 
+            return response.status(400).send(errors.cityNotFound);
+
+        return response.status(500).send(errors.internalServerError);
+    }
 }
 
 async function deleteLocation(request, response) {
@@ -82,9 +108,12 @@ async function deleteLocation(request, response) {
 
 }
 
+
+
 function validate(request) {
     return Joi.validate(request.body, {
         zip_code: Joi.string().max(50).required(),
+        country_code: Joi.string().max(50).required(),
         address: Joi.string().max(1000).required(),
     });
 }
