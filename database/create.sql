@@ -30,16 +30,19 @@ CREATE TABLE Country (
     name TEXT NOT NULL
 );
 
-CREATE TABLE ZipCode (
-    zip_code TEXT PRIMARY KEY,
+CREATE TABLE City (
+    zip_code TEXT NOT NULL,
     country_code TEXT REFERENCES Country NOT NULL,
-    city_name TEXT NOT NULL
+    name TEXT NOT NULL,
+    PRIMARY KEY (zip_code, country_code)
 );
 
 CREATE TABLE Location (
     id BIGSERIAL PRIMARY KEY,
-    zip_code TEXT REFERENCES ZipCode NOT NULL,
-    address TEXT NOT NULL
+    zip_code TEXT NOT NULL,
+    country_code TEXT NOT NULL,
+    address TEXT NOT NULL,
+    FOREIGN KEY (zip_code, country_code) REFERENCES City (zip_code, country_code)
 );
 
 CREATE TABLE UserBase (
