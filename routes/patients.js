@@ -201,8 +201,6 @@ async function updatePatient(request, response) {
     }      
     catch(error) {
         await client.query('ROLLBACK');
-        console.log(error);
-        
         return response.status(500).send(errors.internalServerError);      
     } finally {
         client.release();
@@ -230,12 +228,12 @@ function validateUpdate(request) {
                 base: 'The password must have one uppercase character, one lowercase character, and a number.' 
             }}}
         }),
-        location_id: Joi.number().allow(null),
-        phone: Joi.string().allow(null).trim().max(255),
-        birth_date: Joi.date().allow(null).format('YYYY-MM-DD'),
-        sex: Joi.string().allow(null).valid(['male', 'female']),
-        height: Joi.number().allow(null).min(0).max(32767),
-        weight: Joi.number().allow(null).min(0).max(32767)
+        location_id: Joi.number().allow(null).required(),
+        phone: Joi.string().allow(null).trim().max(255).required(),
+        birth_date: Joi.date().allow(null).format('YYYY-MM-DD').required(),
+        sex: Joi.string().allow(null).valid(['male', 'female']).required(),
+        height: Joi.number().allow(null).min(0).max(32767).required(),
+        weight: Joi.number().allow(null).min(0).max(32767).required()
     }).with('password', 'current_password'));
 }
 

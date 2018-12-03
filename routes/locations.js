@@ -5,42 +5,40 @@ const pool = require('../database/pool');
 const auth = require('../middleware/auth');
 const errors = require('../errors.js');
 const getpatients = require('../middleware/getpatients');
+const onlypatient = require('../middleware/onlypatient');
 
 router.get('/:id', [auth, getpatients], getLocation);
-router.get('/:id', auth, getLocation);
 router.post('/', auth, createLocation);
-router.put('/:id', auth, updateLocation);
-router.delete('/:id', auth, deleteLocation);
+router.put('/:id', [auth, onlypatient], updateLocation);
+router.delete('/:id', [auth, onlypatient], deleteLocation);
 
 async function getLocation(request, response) {
     const id = parseInt(request.params.id);
     if (isNaN(id)) return response.status(400).send(errors.urlParameterNumber);
-          
+
+    if (await isOrganisation(id) == false) {
+        const patient = await getPatientOwner(id);
+
+        if (patient === null)
+            return response.status(403).send(errors.accessDenied);
+
+        if (request.user.type == 'patient' && request.user.sub !== patient.id) 
+            return response.status(403).send(errors.accessDenied);
+    
+        if (request.user.type == 'physiotherapist' && !request.user.patients.list.includes(patient.id))
+            return response.status(403).send(errors.accessDenied);
+    }
+
     try {
-        const location = await pool.query(`
+        const selected = await pool.query(`
             SELECT id, zip_code, country_code, address 
             FROM location WHERE id = $1`, [id]
         );
-        
-        if (location.rows.length !== 1)
+
+        if (selected.rows.length !== 1)
             return response.status(404).send(errors.elementNotFound);
-
-        const organisation = await pool.query('SELECT COUNT(*) FROM Organisation WHERE location_id = $1', [id]);
-
-        if (organisation.rows[0].count != 1) {
-            const patient = await pool.query('SELECT user_id AS id FROM Patient WHERE location_id = $1', [id]);
-
-            if (patient.rows.length !== 1)
-                return response.status(403).send(errors.accessDenied);
-
-            if (request.user.type == 'patient' && request.user.sub !== patient.rows[0].id) 
-                return response.status(403).send(errors.accessDenied);
         
-            if (request.user.type == 'physiotherapist' && !request.user.patients.list.includes(patient.rows[0].id))
-                return response.status(403).send(errors.accessDenied);
-        }
-        
-        return response.send(location.rows[0]);
+        return response.send(selected.rows[0]);
     } catch(error) {
         return response.status(500).send(error.message);
     }
@@ -56,13 +54,10 @@ async function createLocation(request, response) {
     }
 
     try {
-        const inserted = await pool.query(`
-            INSERT INTO Location (zip_code, country_code, address) 
-            VALUES ($1, $2, $3) RETURNING *`,    
-            [request.body.zip_code,
-            request.body.country_code,
-            request.body.address
-        ]);
+        const inserted = await pool.query(
+            'INSERT INTO Location (zip_code, country_code, address) VALUES ($1, $2, $3) RETURNING *',    
+            [request.body.zip_code, request.body.country_code, request.body.address]
+        );
 
         return response.send(inserted.rows[0]);
     } catch(error) {
@@ -75,7 +70,14 @@ async function createLocation(request, response) {
 
 async function updateLocation(request, response) {
     const id = parseInt(request.params.id);
-    if (isNaN(id)) return response.status(400).send('Id must be a number.');
+    if (isNaN(id)) return response.status(400).send(errors.urlParameterNumber);
+
+    if (await isOrganisation(id) == true)
+        return response.status(403).send(errors.accessDenied);
+
+    const patient = await getPatientOwner(id);
+    if (patient === null || request.user.sub != patient.id) 
+        return response.status(403).send(errors.accessDenied);
 
     const result = validate(request);
     if (result.error) {
@@ -86,9 +88,9 @@ async function updateLocation(request, response) {
     }
 
     try {
-        const updated = pool.query(
-            'UPDATE Location SET zip_code = $1, country_code = $2, address = $3 WHERE id = $4',
-            [request.body.zip_code, request.body.country_code, address, id]
+        const updated = await pool.query(
+            'UPDATE Location SET zip_code = $1, country_code = $2, address = $3 WHERE id = $4 RETURNING *',
+            [request.body.zip_code, request.body.country_code, request.body.address, id]
         );
 
         if (updated.rows.length !== 1)
@@ -107,9 +109,49 @@ async function deleteLocation(request, response) {
     const id = parseInt(request.params.id);
     if (isNaN(id)) return response.status(400).send(errors.urlParameterNumber);
 
+    if (await isOrganisation(id) == true)
+        return response.status(403).send(errors.accessDenied);
+
+    const patient = await getPatientOwner(id);
+    if (patient === null || request.user.sub != patient.id) 
+        return response.status(403).send(errors.accessDenied);
+
+    const client = await pool.connect();
+    try {
+        await client.query('BEGIN');
+        await client.query('UPDATE Patient SET location_id = NULL WHERE user_id = $1', [patient.id]);
+
+        const deleted = await client.query('DELETE FROM Location WHERE id = $1', [id]);
+
+        if (deleted.rows.length !== 1) {
+            await client.query('ROLLBACK');
+            return response.status(404).send(errors.elementNotFound);
+        }
+            
+        await client.query('COMMIT');
+        return response.send(deleted.rows[0]);
+    } catch(error) {
+        await client.query('ROLLBACK');
+        
+        return response.status(500).send(errors.internalServerError);
+    } finally {
+        client.release();
+    }
 }
 
+async function isOrganisation(id) {
+    const organisation = await pool.query('SELECT COUNT(*) FROM Organisation WHERE location_id = $1', [id]);
+    return organisation.rows[0].count == 1;
+}
 
+async function getPatientOwner(id) {
+    const patient = await pool.query('SELECT user_id AS id FROM Patient WHERE location_id = $1', [id]);
+
+    if (patient.rows.length !== 1)
+        return null;
+
+    return patient.rows[0];
+}
 
 function validate(request) {
     return Joi.validate(request.body, {
