@@ -15,6 +15,16 @@ CREATE FUNCTION now_utc() RETURNS TIMESTAMP AS $$
   SELECT now() AT TIME ZONE 'utc';
 $$ LANGUAGE sql;
 
+CREATE FUNCTION UpdateUpdated() RETURNS TRIGGER 
+AS 
+$BODY$
+BEGIN
+    new.updated := now_utc();
+    RETURN new;
+END;
+$BODY$
+LANGUAGE plpgsql;
+
 CREATE TYPE USERTYPE AS ENUM (
     'patient',
     'physiotherapist'
@@ -56,6 +66,9 @@ CREATE TABLE UserBase (
     updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc()
 );
 
+CREATE TRIGGER UserBaseUpdated BEFORE UPDATE ON UserBase
+FOR EACH ROW EXECUTE PROCEDURE UpdateUpdated();
+
 CREATE TABLE Patient (
     user_id BIGINT REFERENCES UserBase NOT NULL PRIMARY KEY,
     location_id BIGINT REFERENCES location,
@@ -75,6 +88,9 @@ CREATE TABLE Organisation(
     updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc()
 );
 
+CREATE TRIGGER OrganisationUpdated BEFORE UPDATE ON Organisation
+FOR EACH ROW EXECUTE PROCEDURE UpdateUpdated();
+
 CREATE TABLE Physiotherapist (
     user_id BIGINT REFERENCES UserBase NOT NULL PRIMARY KEY,
     organisation_id BIGINT REFERENCES Organisation NOT NULL 
@@ -87,6 +103,9 @@ CREATE TABLE Request(
     accepted BOOLEAN NOT NULL,
     created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc()
 );
+
+CREATE TRIGGER RequestUpdated BEFORE UPDATE ON Request
+FOR EACH ROW EXECUTE PROCEDURE UpdateUpdated();
 
 CREATE TABLE Period(
     request_id BIGINT REFERENCES Request NOT NULL PRIMARY KEY,
@@ -102,6 +121,9 @@ CREATE TABLE JournalEntry(
     updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc()
 );
 
+CREATE TRIGGER JournalEntryUpdated BEFORE UPDATE ON JournalEntry
+FOR EACH ROW EXECUTE PROCEDURE UpdateUpdated();
+
 CREATE TABLE StepCount(
     id BIGSERIAL PRIMARY KEY,
     patient_id BIGINT REFERENCES Patient NOT NULL,
@@ -114,10 +136,14 @@ CREATE TABLE Exercise(
     author_id BIGINT REFERENCES Physiotherapist,
     name TEXT NOT NULL,
     description TEXT,
+    custom BOOLEAN NOT NULL,
     created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc(),
-    updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc(),
-    custom BOOLEAN NOT NULL
+    updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc()
+    
 );
+
+CREATE TRIGGER ExerciseUpdated BEFORE UPDATE ON Exercise
+FOR EACH ROW EXECUTE PROCEDURE UpdateUpdated();
 
 CREATE TABLE Dizziness (
     id BIGSERIAL PRIMARY KEY,
@@ -128,6 +154,9 @@ CREATE TABLE Dizziness (
     created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc(),
     updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc()
 );
+
+CREATE TRIGGER DizzinessUpdated BEFORE UPDATE ON Dizziness
+FOR EACH ROW EXECUTE PROCEDURE UpdateUpdated();
 
 CREATE TABLE ExerciseFavorite(
     exercise_id BIGINT REFERENCES Exercise NOT NULL,
@@ -148,3 +177,6 @@ CREATE TABLE Recommendation(
     created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc(),
     updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc()
 );
+
+CREATE TRIGGER RecommendationUpdated BEFORE UPDATE ON Recommendation
+FOR EACH ROW EXECUTE PROCEDURE UpdateUpdated();

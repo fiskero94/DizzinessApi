@@ -36,8 +36,6 @@ async function getCountry(request, response) {
 
         return response.send(selected.rows[0]);
     } catch(error) {
-        console.log(error);
-        
         return response.status(500).send(errors.internalServerError);
     }
 }
