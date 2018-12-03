@@ -123,7 +123,7 @@ CREATE TABLE Dizziness (
     id BIGSERIAL PRIMARY KEY,
     patient_id BIGINT REFERENCES Patient NOT NULL,
     exercise_id BIGINT REFERENCES Exercise,
-    level SMALLINT NOT NULL,
+    level SMALLINT,
     note TEXT NOT NULL,
     created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc(),
     updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc()

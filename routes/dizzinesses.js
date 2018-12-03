@@ -12,8 +12,7 @@ router.delete('/:id', deleteDizziness);
 
 async function getAllDizzinesses(request, response) {
     try {
-        const selected = await pool.query(`
-        SELECT id,
+        let query = `SELECT id,
             patient_id,
             exercise_id,
             level,
@@ -21,10 +20,28 @@ async function getAllDizzinesses(request, response) {
             created,
             updated
             FROM dizziness
-            WHERE patient_id = $1 AND CAST (created AS DATE) = $2
-        `, [request.user.sub, request.query.date]
-            );
+            WHERE patient_id = $1`
+        let params = [request.user.sub]
 
+        if(request.query.date !== undefined)
+        {
+            query += " AND CAST (created AS DATE) = $2"
+            params.push(request.query.date)
+        }
+
+        if(request.query.levelgiven !== undefined)
+        {
+            if(request.query.levelgiven)
+            {
+                query += " AND level IS NOT NULL"
+            }
+            else
+            {
+                query += " AND level IS NULL"
+            }
+        }
+
+        const selected = await pool.query(query, params);
         return response.send(selected.rows);
     }
 

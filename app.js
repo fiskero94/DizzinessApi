@@ -7,11 +7,15 @@ const helmet = require('helmet');
 const express = require('express');
 const app = express();
 var morgan = require('morgan');
+var boolParser = require('express-query-boolean');
+var bodyParser = require('body-parser');
 
 // Middleware
 app.use(express.json());
 app.use(helmet());
 app.use(morgan('tiny'));
+app.use(bodyParser.json());
+app.use(boolParser());
 
 // Routes
 app.use('/v1/wipes', require('./routes/wipes'));
@@ -26,6 +30,7 @@ app.use('/v1/physiotherapists', require('./routes/physiotherapists'));
 app.use('/v1/journallogs', require('./routes/journallogs'));
 app.use('/v1/locations', require('./routes/locations'));
 app.use('/v1/journalentries', require('./routes/journalentries'));
+app.use('/v1/stepcounts', require('./routes/stepcounts'));
 
 // Run
 app.listen(apiConfig.port, () => console.log('Listening on port ' + apiConfig.port + '...'));
