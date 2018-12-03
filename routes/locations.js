@@ -7,6 +7,7 @@ const errors = require('../errors.js');
 const getpatients = require('../middleware/getpatients');
 
 router.get('/:id', [auth, getpatients], getLocation);
+router.get('/:id', auth, getLocation);
 router.post('/', auth, createLocation);
 router.put('/:id', auth, updateLocation);
 router.delete('/:id', auth, deleteLocation);
@@ -74,7 +75,7 @@ async function createLocation(request, response) {
 
 async function updateLocation(request, response) {
     const id = parseInt(request.params.id);
-    if (isNaN(id)) return response.status(400).send(errors.urlParameterNumber);
+    if (isNaN(id)) return response.status(400).send('Id must be a number.');
 
     const result = validate(request);
     if (result.error) {
