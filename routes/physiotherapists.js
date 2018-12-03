@@ -1,14 +1,36 @@
 const express = require('express');
 const router = express.Router();
-const Joi = require('joi');
 const pool = require('../database/pool');
 const auth = require('../middleware/auth');
+const errors = require('../errors.js');
 
-router.get('/:id', auth, getPhysiotherapistById);
+router.get('/', auth, getAllPhysiotherapists);
+router.get('/:id', auth, getPhysiotherapist);
 
-async function getPhysiotherapistById(request, response) {
+async function getAllPhysiotherapists(request, response) {
+    try {
+        const selected = await pool.query(`
+            SELECT 
+                UserBase.id, 
+                UserBase.first_name, 
+                UserBase.last_name, 
+                UserBase.email,
+                UserBase.created, 
+                UserBase.updated, 
+                Physiotherapist.organisation_id
+            FROM UserBase 
+            INNER JOIN Physiotherapist ON UserBase.id = Physiotherapist.user_id`
+        );
+
+        return response.send(selected.rows);
+    } catch(error) {
+        return response.status(500).send(errors.internalServerError);
+    }
+}
+
+async function getPhysiotherapist(request, response) {
     const id = parseInt(request.params.id);
-    if (isNaN(id)) return response.status(400).send('Id must be a number.');
+    if (isNaN(id)) return response.status(400).send(errors.urlParameterNumber);
 
     try {
         const selected = await pool.query(`
@@ -20,18 +42,17 @@ async function getPhysiotherapistById(request, response) {
                 UserBase.created, 
                 UserBase.updated, 
                 Physiotherapist.organisation_id
-            FROM UserBase INNER JOIN Physiotherapist 
-            ON UserBase.id = Physiotherapist.user_id WHERE id = $1;`, 
+            FROM UserBase 
+            INNER JOIN Physiotherapist ON UserBase.id = Physiotherapist.user_id 
+            WHERE id = $1;`, 
             [id]
         );
 
         if (selected.rows.length !== 1) 
-        return response.status(404).send('A physiotherapist with the given id could not be found.');
+            return response.status(404).send(errors.elementNotFound);
 
         return response.send(selected.rows[0]);
-    }
-
-    catch(error) {
+    } catch(error) {
         return response.status(500).send(error.message);
     }
 }

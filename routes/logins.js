@@ -22,17 +22,11 @@ async function createLogin(request, response) {
             [request.body.email]
         );
 
-        if (selected.rows.length !== 1) return response.status(400).send({ 
-            code: errors.invalidEmailOrPassword.code, 
-            message: errors.invalidEmailOrPassword.message
-        });
+        if (selected.rows.length !== 1) return response.status(400).send(errors.invalidEmailOrPassword);
 
         const user = selected.rows[0];
         const validPassword = await bcrypt.compare(request.body.password, user.password);
-        if (!validPassword) return response.status(400).send({ 
-            code: errors.invalidEmailOrPassword.code, 
-            message: errors.invalidEmailOrPassword.message
-        });
+        if (!validPassword) return response.status(400).send(errors.invalidEmailOrPassword);
 
         const token = jwt.sign({ 
             sub: user.id, 
@@ -42,7 +36,7 @@ async function createLogin(request, response) {
         
         return response.send({ token: token });
     } catch (error) {
-        return response.status(500).send({ code: errors.internalServerError.code, message: error.message });
+        return response.status(500).send(errors.internalServerError);
     }
 }
 
