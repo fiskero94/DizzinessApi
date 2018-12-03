@@ -6,6 +6,7 @@ const auth = require('../middleware/auth');
 
 router.post('/', auth, createLocation);
 router.get('/:id', auth, getLocation);
+router.put('/:id', auth, updateLocation);
 
 
 async function createLocation(request, response){
@@ -37,6 +38,31 @@ async function getLocation(request, response) {
         if (selected.rows.length !== 1)
             return response.status(404).send('A dizziness with the given id could not be found.');
             
+        return response.send(selected.rows[0]);
+    } catch(error) {
+        return response.status(500).send(error.message);
+    }
+}
+
+async function updateLocation(request, response) {
+    const id = parseInt(request.params.id);
+    if (isNaN(id)) return response.status(400).send('Id must be a number.');
+
+    const client = await pool.connect();
+    try {
+        const selected = await client.query(`
+            UPDATE Location
+            SET 
+                zip_code = $1,           
+                address = $2             
+            WHERE user_id = $3 RETURNING *`, 
+            [request.body.zip_code,
+            request.body.address,
+            id]);
+
+        if (selected.rows.length !== 1) 
+        return response.status(404).send('A patient with the given id could not be found.');
+
         return response.send(selected.rows[0]);
     } catch(error) {
         return response.status(500).send(error.message);
