@@ -202,9 +202,6 @@ async function updatePatient(request, response) {
         await client.query('COMMIT');
         return response.send(updated.rows);
     } catch(error) {
-        console.log(error);
-        
-
         if (error.hasOwnProperty('code') && error.code == "23503") 
             return response.status(400).send(errors.locationNotFound);
 
