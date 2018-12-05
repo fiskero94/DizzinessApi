@@ -31,25 +31,6 @@ INSERT INTO City (zip_code, country_code, name) VALUES ('8', 'HU', 'Budapest');
 INSERT INTO City (zip_code, country_code, name) VALUES ('9', 'IS', 'Reykjavik');
 INSERT INTO City (zip_code, country_code, name) VALUES ('10', 'JP', 'Tokyo');
 
-INSERT INTO Location (zip_code, country_code, address) VALUES ('1000', 'DK', 'Mitchellsgade 8');  
-INSERT INTO Location (zip_code, country_code, address) VALUES ('1000', 'DK', 'Ribevej 3');
-INSERT INTO Location (zip_code, country_code, address) VALUES ('1000', 'DK', 'Nordogade 11');
-INSERT INTO Location (zip_code, country_code, address) VALUES ('1000', 'DK', 'Hjortebjergvej 1');
-INSERT INTO Location (zip_code, country_code, address) VALUES ('1000', 'DK', 'Adalsvej 22');
-INSERT INTO Location (zip_code, country_code, address) VALUES ('1000', 'DK', 'Liseborgvej 27');
-INSERT INTO Location (zip_code, country_code, address) VALUES ('1000', 'DK', 'Kristrup Engvej 34');
-INSERT INTO Location (zip_code, country_code, address) VALUES ('1000', 'DK', 'Fidalvej 6');
-INSERT INTO Location (zip_code, country_code, address) VALUES ('9000', 'DK', 'Baraldsgota 53');
-INSERT INTO Location (zip_code, country_code, address) VALUES ('8000', 'DK', 'Calle Duarte 76');
-INSERT INTO Location (zip_code, country_code, address) VALUES ('5000', 'DK', '3 Khaled Ibn El Walid');
-INSERT INTO Location (zip_code, country_code, address) VALUES ('7800', 'DK', 'Kaarrostie 56');
-INSERT INTO Location (zip_code, country_code, address) VALUES ('8800', 'DK', '95  Place de la Madeleine');
-INSERT INTO Location (zip_code, country_code, address) VALUES ('8900', 'DK', 'Genslerstrase 84');
-INSERT INTO Location (zip_code, country_code, address) VALUES ('7100', 'DK', 'Greekadresse 43');
-INSERT INTO Location (zip_code, country_code, address) VALUES ('1', 'FO', 'Arpad fejedelem utja 16');
-INSERT INTO Location (zip_code, country_code, address) VALUES ('2', 'DO', 'Laugarvegur 95');
-INSERT INTO Location (zip_code, country_code, address) VALUES ('3', 'EG', 'Konichiwa 23');
-
 INSERT INTO UserBase (type, first_name, last_name, email, password) VALUES ('patient', 'Anna', 'Larsen', 'annalarsen@hotmail.com', '$2b$10$2Sq9Kwqwwt5KLVKEebKyrOtd5REbkxHpB19N/3gNejlgPoLXI2DDe');
 INSERT INTO UserBase (type, first_name, last_name, email, password) VALUES ('patient', 'Kristian Magnus', 'Larsen', 'krimaglar@hotmail.com', '$2b$10$2Sq9Kwqwwt5KLVKEebKyrOtd5REbkxHpB19N/3gNejlgPoLXI2DDe');
 INSERT INTO UserBase (type, first_name, last_name, email, password) VALUES ('patient', 'Johannes', 'Pedersen', 'johannestheman@gmail.com', '$2b$10$2Sq9Kwqwwt5KLVKEebKyrOtd5REbkxHpB19N/3gNejlgPoLXI2DDe');
@@ -59,14 +40,14 @@ INSERT INTO UserBase (type, first_name, last_name, email, password) VALUES ('pat
 INSERT INTO UserBase (type, first_name, last_name, email, password) VALUES ('physiotherapist', 'Hans', 'Petersen', 'hanspetersen@gmail.com', '$2b$10$2Sq9Kwqwwt5KLVKEebKyrOtd5REbkxHpB19N/3gNejlgPoLXI2DDe');
 INSERT INTO UserBase (type, first_name, last_name, email, password) VALUES ('physiotherapist', 'Peter', 'Hansen', 'peterhansen@gmail.com', '$2b$10$2Sq9Kwqwwt5KLVKEebKyrOtd5REbkxHpB19N/3gNejlgPoLXI2DDe');
 
-INSERT INTO Patient (user_id, location_id, birth_date, sex, height, weight) VALUES (1, 1, '1957-03-05', 'female', 165, 60);
-INSERT INTO Patient (user_id, location_id, birth_date, sex, height, weight) VALUES (2, 2, '1943-11-08', 'male', 175, 91);
-INSERT INTO Patient (user_id, location_id, birth_date, sex, height, weight) VALUES (3, 3, '1961-09-18', 'male', 190, 110);
-INSERT INTO Patient (user_id, location_id, birth_date, sex, height, weight) VALUES (4, 4, '1955-04-30', 'female', 170, 59);
-INSERT INTO Patient (user_id, location_id, birth_date, sex, height, weight) VALUES (5, 5, '1970-08-17', 'female', 177, 68);
+INSERT INTO Patient (user_id, birth_date, sex, height, weight, zip_code, country_code, address) VALUES (1, '1957-03-05', 'female', 165, 60, '1000', 'DK', 'Mitchellsgade 8');
+INSERT INTO Patient (user_id, birth_date, sex, height, weight, zip_code, country_code, address) VALUES (2, '1943-11-08', 'male', 175, 91, '1000', 'DK', 'Ribevej 3');
+INSERT INTO Patient (user_id, birth_date, sex, height, weight, zip_code, country_code, address) VALUES (3, '1961-09-18', 'male', 190, 110, '1000', 'DK', 'Nordogade 11');
+INSERT INTO Patient (user_id, birth_date, sex, height, weight, zip_code, country_code, address) VALUES (4, '1955-04-30', 'female', 170, 59, '1000', 'DK', 'Hjortebjergvej 1');
+INSERT INTO Patient (user_id, birth_date, sex, height, weight, zip_code, country_code, address) VALUES (5, '1970-08-17', 'female', 177, 68, '1000', 'DK', 'Adalsvej 22');
 
-INSERT INTO Organisation(location_id, name, phone) VALUES (6, 'Organisation Navn 1', 59285722);
-INSERT INTO Organisation(location_id, name, phone) VALUES (7, 'Organisation Navn 2', 52958354);
+INSERT INTO Organisation(name, phone, zip_code, country_code, address) VALUES ('Organisation Navn 1', 59285722, '1000', 'DK', 'Liseborgvej 27');
+INSERT INTO Organisation(name, phone, zip_code, country_code, address) VALUES ('Organisation Navn 2', 52958354, '1000', 'DK', 'Kristrup Engvej 34');
 
 INSERT INTO Physiotherapist (user_id, organisation_id) VALUES (6, 1);
 INSERT INTO Physiotherapist (user_id, organisation_id) VALUES (7, 2);

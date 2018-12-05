@@ -71,21 +71,27 @@ FOR EACH ROW EXECUTE PROCEDURE UpdateUpdated();
 
 CREATE TABLE Patient (
     user_id BIGINT REFERENCES UserBase NOT NULL PRIMARY KEY,
-    location_id BIGINT REFERENCES location,
     phone TEXT,
     birth_date DATE,
     sex SEX,
     height SMALLINT,
-    weight SMALLINT
+    weight SMALLINT,
+    zip_code TEXT,
+    country_code TEXT,
+    address TEXT,
+    FOREIGN KEY (zip_code, country_code) REFERENCES City (zip_code, country_code)
 );
 
 CREATE TABLE Organisation(
     id BIGSERIAL PRIMARY KEY,
-    location_id BIGINT REFERENCES location,
     name TEXT NOT NULL,
     phone TEXT NOT NULL,
+    zip_code TEXT NOT NULL,
+    country_code TEXT NOT NULL,
+    address TEXT NOT NULL,
     created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc(),
-    updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc()
+    updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc(),
+    FOREIGN KEY (zip_code, country_code) REFERENCES City (zip_code, country_code)
 );
 
 CREATE TRIGGER OrganisationUpdated BEFORE UPDATE ON Organisation

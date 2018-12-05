@@ -6,7 +6,7 @@ module.exports = {
     invalidToken: { code: "40005", message: "Invalid token." },
     urlParameterNumber: { code: "40006", message: "The url parameter must be a number." },
     currentPasswordIncorrect: { code: "40007", message: "The current password is incorrect." },
-    cityNotFound: { code: "40008",  message: "The city does not exist." },
+    locationNotFound: { code: "40008",  message: "The city/country does not exist." },
     onlyPhysiotherapist: { code: "40301", message: "The endpoint can only be used by physiotherapists."},
     onlyPatient: { code: "40302", message: "The endpoint can only be used by patients."},
     accessDenied: { code: "40303", message: "You do not have access to the specified element." },

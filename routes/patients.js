@@ -161,14 +161,16 @@ async function updatePatient(request, response) {
             await client.query('UPDATE UserBase SET password = $1 WHERE id = $2 RETURNING *', [hash, id]);
         }
 
-        await client.query(`UPDATE Patient SET location_id = $1, phone = $2, 
-            birth_date = $3, sex = $4, height = $5, weight = $6 WHERE user_id = $7`,
-            [request.body.location_id,
-            request.body.phone,
+        await client.query(`UPDATE Patient SET phone = $1, birth_date = $2, sex = $3, height = $4,
+            weight = $5, zip_code = $6, country_code = $7, address = $8 WHERE user_id = $9`,
+            [request.body.phone,
             request.body.birth_date,
             request.body.sex,
             request.body.height,
             request.body.weight,
+            request.body.zip_code,
+            request.body.country_code,
+            request.body.address,
             id
         ]);
 
@@ -180,12 +182,14 @@ async function updatePatient(request, response) {
                 UserBase.email,
                 UserBase.created, 
                 UserBase.updated, 
-                Patient.location_id, 
                 Patient.phone,
                 Patient.birth_date, 
                 Patient.sex, 
                 Patient.height, 
-                Patient.weight 
+                Patient.weight,
+                Patient.zip_code,
+                Patient.country_code,
+                Patient.address
             FROM UserBase 
             INNER JOIN Patient ON UserBase.id = Patient.user_id 
             WHERE id = $1`, 
@@ -194,12 +198,16 @@ async function updatePatient(request, response) {
 
         if (updated.rows.length !== 1)
             return response.status(404).send(errors.elementNotFound);
-
         
         await client.query('COMMIT');
         return response.send(updated.rows);
-    }      
-    catch(error) {
+    } catch(error) {
+        console.log(error);
+        
+
+        if (error.hasOwnProperty('code') && error.code == "23503") 
+            return response.status(400).send(errors.locationNotFound);
+
         await client.query('ROLLBACK');
         return response.status(500).send(errors.internalServerError);      
     } finally {
@@ -228,12 +236,14 @@ function validateUpdate(request) {
                 base: 'The password must have one uppercase character, one lowercase character, and a number.' 
             }}}
         }),
-        location_id: Joi.number().allow(null).required(),
         phone: Joi.string().allow(null).trim().max(255).required(),
         birth_date: Joi.date().allow(null).format('YYYY-MM-DD').required(),
         sex: Joi.string().allow(null).valid(['male', 'female']).required(),
         height: Joi.number().allow(null).min(0).max(32767).required(),
-        weight: Joi.number().allow(null).min(0).max(32767).required()
+        weight: Joi.number().allow(null).min(0).max(32767).required(),
+        zip_code: Joi.string().allow(null).max(50).required(),
+        country_code: Joi.string().allow(null).max(50).required(),
+        address: Joi.string().allow(null).max(255).required()
     }).with('password', 'current_password'));
 }
 
