@@ -182,7 +182,8 @@ CREATE TABLE Recommendation(
     patient_id BIGINT REFERENCES Patient NOT NULL,
     note TEXT NOT NULL,
     created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc(),
-    updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc()
+    updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc(),
+    UNIQUE(physiotherapist_id, exercise_id, patient_id)
 );
 
 CREATE TRIGGER RecommendationUpdated BEFORE UPDATE ON Recommendation

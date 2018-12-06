@@ -52,7 +52,7 @@ async function createFavoriteExercise(request, response) {
     try {
         const created = await pool.query(`
             INSERT INTO exercisefavorite (exercise_id, patient_id) VALUES ($1, $2) RETURNING *`, 
-            [request.body.exercise_id, request.user.sub]
+            [request.body.exercise_id, userid]
         );
 
         return response.send(created.rows[0]);
@@ -76,7 +76,7 @@ async function deleteFavoriteExercise(request, response) {
     try {
         const deleted = await pool.query(`
             DELETE FROM exercisefavorite WHERE exercise_id = $1 and patient_id = $2 RETURNING *`, 
-            [exercise_id, request.user.sub]
+            [exercise_id, userid]
         );
         
         if (deleted.rows.length !== 1)
