@@ -40,11 +40,11 @@ INSERT INTO UserBase (type, first_name, last_name, email, password) VALUES ('pat
 INSERT INTO UserBase (type, first_name, last_name, email, password) VALUES ('physiotherapist', 'Hans', 'Petersen', 'hanspetersen@gmail.com', '$2b$10$2Sq9Kwqwwt5KLVKEebKyrOtd5REbkxHpB19N/3gNejlgPoLXI2DDe');
 INSERT INTO UserBase (type, first_name, last_name, email, password) VALUES ('physiotherapist', 'Peter', 'Hansen', 'peterhansen@gmail.com', '$2b$10$2Sq9Kwqwwt5KLVKEebKyrOtd5REbkxHpB19N/3gNejlgPoLXI2DDe');
 
-INSERT INTO Patient (user_id, birth_date, sex, height, weight, zip_code, country_code, address) VALUES (1, '1957-03-05', 'female', 165, 60, '1000', 'DK', 'Mitchellsgade 8');
-INSERT INTO Patient (user_id, birth_date, sex, height, weight, zip_code, country_code, address) VALUES (2, '1943-11-08', 'male', 175, 91, '1000', 'DK', 'Ribevej 3');
-INSERT INTO Patient (user_id, birth_date, sex, height, weight, zip_code, country_code, address) VALUES (3, '1961-09-18', 'male', 190, 110, '1000', 'DK', 'Nordogade 11');
-INSERT INTO Patient (user_id, birth_date, sex, height, weight, zip_code, country_code, address) VALUES (4, '1955-04-30', 'female', 170, 59, '1000', 'DK', 'Hjortebjergvej 1');
-INSERT INTO Patient (user_id, birth_date, sex, height, weight, zip_code, country_code, address) VALUES (5, '1970-08-17', 'female', 177, 68, '1000', 'DK', 'Adalsvej 22');
+INSERT INTO Patient (user_id, phone, birth_date, sex, height, weight, zip_code, country_code, address) VALUES (1, '26713312', '1957-03-05', 'female', 165, 60, '1000', 'DK', 'Mitchellsgade 8');
+INSERT INTO Patient (user_id, phone, birth_date, sex, height, weight, zip_code, country_code, address) VALUES (2, '12345678', '1943-11-08', 'male', 175, 91, '1000', 'DK', 'Ribevej 3');
+INSERT INTO Patient (user_id, phone, birth_date, sex, height, weight, zip_code, country_code, address) VALUES (3, '72363523', '1961-09-18', 'male', 190, 110, '1000', 'DK', 'Nordogade 11');
+INSERT INTO Patient (user_id, phone, birth_date, sex, height, weight, zip_code, country_code, address) VALUES (4, '32634253', '1955-04-30', 'female', 170, 59, '1000', 'DK', 'Hjortebjergvej 1');
+INSERT INTO Patient (user_id, phone, birth_date, sex, height, weight, zip_code, country_code, address) VALUES (5, '33252362', '1970-08-17', 'female', 177, 68, '1000', 'DK', 'Adalsvej 22');
 
 INSERT INTO Organisation(name, phone, zip_code, country_code, address) VALUES ('Organisation Navn 1', 59285722, '1000', 'DK', 'Liseborgvej 27');
 INSERT INTO Organisation(name, phone, zip_code, country_code, address) VALUES ('Organisation Navn 2', 52958354, '1000', 'DK', 'Kristrup Engvej 34');

@@ -27,12 +27,14 @@ async function getAllPatients(request, response) {
                 UserBase.email,
                 UserBase.created, 
                 UserBase.updated, 
-                Patient.location_id, 
                 Patient.phone,
                 Patient.birth_date, 
                 Patient.sex, 
                 Patient.height, 
-                Patient.weight 
+                Patient.weight,
+                Patient.zip_code,
+                Patient.country_code,
+                Patient.address 
             FROM UserBase 
             INNER JOIN Patient ON UserBase.id = Patient.user_id 
             WHERE id IN ${request.user.patients.inString}`
@@ -63,12 +65,14 @@ async function getPatient(request, response) {
                 UserBase.email,
                 UserBase.created, 
                 UserBase.updated, 
-                Patient.location_id, 
                 Patient.phone,
                 Patient.birth_date, 
                 Patient.sex, 
                 Patient.height, 
-                Patient.weight 
+                Patient.weight,
+                Patient.zip_code,
+                Patient.country_code,
+                Patient.address 
             FROM UserBase 
             INNER JOIN Patient ON UserBase.id = Patient.user_id 
             WHERE id = $1`, 
