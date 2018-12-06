@@ -141,12 +141,14 @@ FOR EACH ROW EXECUTE PROCEDURE UpdateUpdated();
 
 CREATE TABLE ExerciseFavorite(
     exercise_id BIGINT REFERENCES Exercise NOT NULL,
-    patient_id BIGINT REFERENCES Patient NOT NULL
+    patient_id BIGINT REFERENCES Patient NOT NULL,
+    UNIQUE(exercise_id, patient_id)
 );
 
 CREATE TABLE CustomExercisePatient(
     exercise_id BIGINT REFERENCES Exercise NOT NULL,
-    patient_id BIGINT REFERENCES Patient NOT NULL
+    patient_id BIGINT REFERENCES Patient NOT NULL,
+    UNIQUE(exercise_id, patient_id)
 );
 
 CREATE TABLE Dizziness (

@@ -78,7 +78,7 @@ async function createDizziness(request, response) {
     const userid = parseInt(request.params.userid);
     if (isNaN(userid)) return response.status(400).send(errors.urlParameterNumber);
 
-    if (request.user.type == 'patient' && request.user.sub != userid) 
+    if (request.user.sub != userid) 
         return response.status(403).send(errors.accessDenied);
 
     const result = validate(request);
@@ -111,7 +111,7 @@ async function deleteDizziness(request, response) {
     if (isNaN(id)) return response.status(400).send(errors.urlParameterNumber);
     if (isNaN(userid)) return response.status(400).send(errors.urlParameterNumber);
 
-    if (request.user.type == 'patient' && request.user.sub != userid) 
+    if (request.user.sub != userid) 
         return response.status(403).send(errors.accessDenied);
 
     try {
