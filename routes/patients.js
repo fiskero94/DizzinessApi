@@ -152,7 +152,7 @@ async function updatePatient(request, response) {
     try {
         await client.query('BEGIN');
 
-        if (request.body.password !== undefined) {
+        if (request.body.password != null && request.body.current_password != null) {
             const selected = await client.query('SELECT password FROM UserBase WHERE id = $1', [id]);
             if (selected.rows.length !== 1) return response.status(404).send(errors.elementNotFound);
             
@@ -230,9 +230,9 @@ function validateCreate(request) {
 }
 
 function validateUpdate(request) {
-    return Joi.validate(request.body, Joi.object().keys({
-        current_password: Joi.string().max(255),
-        password: Joi.string().max(255).regex(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/).options({
+    return Joi.validate(request.body, {
+        current_password: Joi.string().allow(null).max(255),
+        password: Joi.string().allow(null).max(255).regex(/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/).options({
             language: { string: { regex: { 
                 base: 'The password must have one uppercase character, one lowercase character, and a number.' 
             }}}
@@ -245,7 +245,7 @@ function validateUpdate(request) {
         zip_code: Joi.string().allow(null).max(50).required(),
         country_code: Joi.string().allow(null).max(50).required(),
         address: Joi.string().allow(null).max(255).required()
-    }).with('password', 'current_password'));
+    });
 }
 
 module.exports = router;
