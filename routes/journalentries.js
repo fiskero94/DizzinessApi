@@ -21,12 +21,15 @@ async function getAllJournalEntries(request, response) {
         return response.status(403).send(errors.accessDenied);
     
     try {
-        const selected = await pool.query(`
-            SELECT id, patient_id, note, created, updated FROM JournalEntry
-            WHERE patient_id = $1 AND CAST (created AS DATE) = $2`, 
-            [userid, request.query.date]
-        );
+        let query = 'SELECT id, patient_id, note, created, updated FROM JournalEntry WHERE patient_id = $1';
+        let params = [userid];
 
+        if (request.query.date !== undefined) {
+            query += ' AND CAST (created AS DATE) = $2';
+            params.push(request.query.date);
+        }
+
+        const selected = await pool.query(query, params);
         return response.send(selected.rows);
     } catch(error) {
         return response.status(500).send(errors.internalServerError);
