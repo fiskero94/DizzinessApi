@@ -27,15 +27,15 @@ async function getAllDizzinesses(request, response) {
             FROM dizziness WHERE patient_id = $1`;
         let params = [userid];
 
-        if(request.query.date !== undefined)
+        if (request.query.date !== undefined)
         {
             query += " AND CAST (created AS DATE) = $2";
             params.push(request.query.date);
         }
 
-        if(request.query.levelgiven !== undefined)
+        if (request.query.levelgiven !== undefined)
         {
-            if(request.query.levelgiven) query += " AND level IS NOT NULL";
+            if (request.query.levelgiven) query += " AND level IS NOT NULL";
             else query += " AND level IS NULL";
         }
 

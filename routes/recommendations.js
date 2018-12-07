@@ -5,9 +5,9 @@ const auth = require('../middleware/auth');
 const errors = require('../errors.js');
 const getpatients = require('../middleware/getpatients');
 
-router.get('/:userid/recommendations/', [auth, getpatients], getAllRecommendedExercises);
+router.get('/:userid/recommendations/', [auth, getpatients], getAllRecommendations);
 
-async function getAllRecommendedExercises(request, response) {
+async function getAllRecommendations(request, response) {
     const userid = parseInt(request.params.userid);
     if (isNaN(userid)) return response.status(400).send(errors.urlParameterNumber);
     
