@@ -3,6 +3,7 @@ const router = express.Router();
 const Joi = require('joi');
 const pool = require('../database/pool');
 const auth = require('../middleware/auth');
+const errors = require('../errors.js');
 
 router.get('/', auth, getAllCustomExercises);
 
@@ -26,7 +27,7 @@ async function getAllCustomExercises(request, response) {
     }
 
     catch(error) {
-        return response.status(500).send(error.message);
+        return response.status(500).send(errors.internalServerError);
     }
 }
 

@@ -53,7 +53,7 @@ async function getPhysiotherapist(request, response) {
 
         return response.send(selected.rows[0]);
     } catch(error) {
-        return response.status(500).send(error.message);
+        return response.status(500).send(errors.internalServerError);
     }
 }
 
