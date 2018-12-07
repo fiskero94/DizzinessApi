@@ -81,6 +81,9 @@ async function createDizziness(request, response) {
     if (request.user.sub != userid) 
         return response.status(403).send(errors.accessDenied);
 
+    if(request.body.exercise_id == null && request.body.level == null)
+        return response.status(400).send(errors.levelRequired);
+
     const result = validate(request);
     if (result.error) {
         return response.status(400).send({ 
@@ -101,7 +104,7 @@ async function createDizziness(request, response) {
 
         return response.send(inserted.rows[0]);
     } catch(error) {
-        return response.status(500).send(error.message);
+        return response.status(500).send(errors.internalServerError);
     }
 }
 
