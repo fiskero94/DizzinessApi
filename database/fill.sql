@@ -57,12 +57,15 @@ INSERT INTO Request(physiotherapist_id, patient_id, accepted) VALUES (6, 2, true
 INSERT INTO Request(physiotherapist_id, patient_id, accepted) VALUES (7, 1, false);
 INSERT INTO Request(physiotherapist_id, patient_id, accepted) VALUES (7, 2, false);
 INSERT INTO Request(physiotherapist_id, patient_id, accepted) VALUES (7, 3, true);
+INSERT INTO Request(physiotherapist_id, patient_id, accepted) VALUES (6, 3, true);
+INSERT INTO Request(physiotherapist_id, patient_id, accepted) VALUES (6, 4, true);
+INSERT INTO Request(physiotherapist_id, patient_id, accepted) VALUES (6, 5, true);
 
-INSERT INTO Period(request_id) VALUES (1);
 INSERT INTO Period(request_id) VALUES (2);
-INSERT INTO Period(request_id) VALUES (3);
-INSERT INTO Period(request_id) VALUES (4);
 INSERT INTO Period(request_id) VALUES (5);
+INSERT INTO Period(request_id) VALUES (6);
+INSERT INTO Period(request_id) VALUES (7);
+INSERT INTO Period(request_id) VALUES (8);
 
 INSERT INTO JournalEntry(patient_id, note, created) VALUES (1, 'Det gik godt', '2018-11-21 14:42:22');
 INSERT INTO JournalEntry(patient_id, note, created) VALUES (1, 'Jeg har det lidt bedre', '2018-11-22 15:43:23');
