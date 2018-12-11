@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const errors = require('../errors.js');
 const { exec } = require('child_process');
+const pool = require('../database/pool');
 
 router.post('/', createWipe);
 
