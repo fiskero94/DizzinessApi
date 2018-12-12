@@ -138,7 +138,7 @@ CREATE TABLE Exercise(
     id BIGSERIAL PRIMARY KEY,
     author_id BIGINT REFERENCES Physiotherapist,
     name TEXT NOT NULL,
-    description TEXT,
+    description TEXT NOT NULL,
     custom BOOLEAN NOT NULL,
     created TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc(),
     updated TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now_utc()

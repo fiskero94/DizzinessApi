@@ -87,7 +87,7 @@ async function createDizziness(request, response) {
     const result = validate(request);
     if (result.error) {
         return response.status(400).send({ 
-            code: errors.validation, 
+            code: errors.validation.code, 
             message: result.error.details[0].message 
         });
     }
