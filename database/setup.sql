@@ -55,14 +55,6 @@ CREATE TABLE City (
     PRIMARY KEY (zip_code, country_code)
 );
 
-CREATE TABLE Location (
-    id BIGSERIAL PRIMARY KEY,
-    zip_code TEXT NOT NULL,
-    country_code TEXT NOT NULL,
-    address TEXT NOT NULL,
-    FOREIGN KEY (zip_code, country_code) REFERENCES City (zip_code, country_code)
-);
-
 CREATE TABLE UserBase (
     id BIGSERIAL PRIMARY KEY,
     type USERTYPE NOT NULL,
